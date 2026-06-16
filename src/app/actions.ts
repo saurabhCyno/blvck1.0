@@ -9,6 +9,13 @@ import { Order } from "@/models/Order";
 import { Inquiry } from "@/models/Inquiry";
 import { Blog } from "@/models/Blog";
 import { Setting } from "@/models/Setting";
+import {
+  sendEmail,
+  buildOrderConfirmationHtml,
+  buildAdminNotificationHtml,
+  buildStatusUpdateHtml,
+  ADMIN_EMAIL,
+} from "@/lib/mail";
 
 // --- AUTHENTICATION ACTION ---
 export async function adminLogin(password: string): Promise<{ success: boolean; error?: string }> {
@@ -169,6 +176,49 @@ export async function createOrder(formData: {
       orderStatus: "Pending",
     });
 
+    // 3. Send confirmation emails
+    const itemDetails = await Promise.all(
+      formData.items.map(async (item) => {
+        const p = await Product.findById(item.productId);
+        return {
+          title: p ? p.title : "Product",
+          size: item.size,
+          quantity: item.quantity,
+          price: item.priceAtPurchase,
+        };
+      })
+    );
+
+    try {
+      await sendEmail({
+        to: formData.customerInfo.email,
+        subject: `Order Confirmed - REF-${newOrder._id.toString().substring(newOrder._id.toString().length - 8)}`,
+        html: buildOrderConfirmationHtml(
+          newOrder._id.toString(),
+          formData.customerInfo,
+          itemDetails,
+          formData.totalAmount
+        ),
+      });
+    } catch (emailErr) {
+      console.warn("Failed to send user confirmation email:", emailErr);
+    }
+
+    try {
+      await sendEmail({
+        to: ADMIN_EMAIL,
+        subject: `New Order - REF-${newOrder._id.toString().substring(newOrder._id.toString().length - 8)}`,
+        html: buildAdminNotificationHtml(
+          newOrder._id.toString(),
+          formData.customerInfo,
+          itemDetails,
+          formData.totalAmount
+        ),
+      });
+    } catch (emailErr) {
+      console.warn("Failed to send admin notification email:", emailErr);
+    }
+
     revalidatePath("/admin/dashboard");
     return { success: true, orderId: newOrder._id.toString() };
   } catch (error: any) {
@@ -277,10 +327,91 @@ export async function adminUpdateOrderStatus(orderId: string, status: string) {
 
   await dbConnect();
   try {
-    await Order.findByIdAndUpdate(orderId, { orderStatus: status });
+    const order = await Order.findByIdAndUpdate(orderId, { orderStatus: status }, { new: true });
+    if (!order) throw new Error("Order not found.");
+
+    try {
+      await sendEmail({
+        to: order.customerInfo.email,
+        subject: `Order ${status.toUpperCase()} - REF-${orderId.substring(orderId.length - 8)}`,
+        html: buildStatusUpdateHtml(orderId, order.customerInfo.name, status),
+      });
+    } catch (emailErr) {
+      console.warn("Failed to send status update email:", emailErr);
+    }
+
     return { success: true };
   } catch (error: any) {
     return { success: false, error: error.message };
+  }
+}
+
+export async function adminCreateOrder(formData: {
+  customerInfo: { name: string; email: string; phone: string; address: string };
+  items: { productId: string; size: string; quantity: number; priceAtPurchase: number }[];
+  totalAmount: number;
+  paymentMethod?: string;
+}) {
+  const isAdmin = await checkAdminSession();
+  if (!isAdmin) throw new Error("Unauthorized access.");
+
+  await dbConnect();
+  try {
+    const newOrder = await Order.create({
+      customerInfo: formData.customerInfo,
+      items: formData.items,
+      totalAmount: formData.totalAmount,
+      paymentMethod: formData.paymentMethod || "COD",
+      orderStatus: "Pending",
+    });
+
+    const itemDetails = await Promise.all(
+      formData.items.map(async (item) => {
+        const p = await Product.findById(item.productId);
+        return {
+          title: p ? p.title : "Product",
+          size: item.size,
+          quantity: item.quantity,
+          price: item.priceAtPurchase,
+        };
+      })
+    );
+
+    try {
+      await sendEmail({
+        to: formData.customerInfo.email,
+        subject: `Order Confirmed - REF-${newOrder._id.toString().substring(newOrder._id.toString().length - 8)}`,
+        html: buildOrderConfirmationHtml(
+          newOrder._id.toString(),
+          formData.customerInfo,
+          itemDetails,
+          formData.totalAmount
+        ),
+      });
+    } catch (emailErr) {
+      console.warn("Failed to send user confirmation email:", emailErr);
+    }
+
+    try {
+      await sendEmail({
+        to: ADMIN_EMAIL,
+        subject: `New WhatsApp Order - REF-${newOrder._id.toString().substring(newOrder._id.toString().length - 8)}`,
+        html: buildAdminNotificationHtml(
+          newOrder._id.toString(),
+          formData.customerInfo,
+          itemDetails,
+          formData.totalAmount
+        ),
+      });
+    } catch (emailErr) {
+      console.warn("Failed to send admin notification email:", emailErr);
+    }
+
+    revalidatePath("/admin/orders");
+    revalidatePath("/admin/dashboard");
+    return { success: true, orderId: newOrder._id.toString() };
+  } catch (error: any) {
+    return { success: false, error: error.message || "Failed to create order." };
   }
 }
 

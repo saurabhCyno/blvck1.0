@@ -15,7 +15,7 @@ export interface IOrder {
     priceAtPurchase: number;
   }[];
   paymentMethod: string;
-  orderStatus: "Pending" | "In Progress" | "Completed" | "Cancelled";
+  orderStatus: "Pending" | "In Progress" | "Completed" | "Cancelled" | "Delivered";
   totalAmount: number;
   createdAt: Date;
 }
@@ -34,7 +34,7 @@ const OrderSchema = new mongoose.Schema<IOrder>({
     priceAtPurchase: { type: Number, required: true }
   }],
   paymentMethod: { type: String, default: "COD" },
-  orderStatus: { type: String, enum: ["Pending", "In Progress", "Completed", "Cancelled"], default: "Pending" },
+  orderStatus: { type: String, enum: ["Pending", "In Progress", "Completed", "Cancelled", "Delivered"], default: "Pending" },
   totalAmount: { type: Number, required: true },
   createdAt: { type: Date, default: Date.now }
 });
