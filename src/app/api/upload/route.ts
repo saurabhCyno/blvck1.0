@@ -30,6 +30,7 @@ export async function POST(request: NextRequest) {
       const dataUri = `data:${mimeType};base64,${base64}`;
       return NextResponse.json({
         url: dataUri,
+        fileId: null,
         message: "Uploaded locally via Base64 conversion (ImageKit keys missing)."
       });
     }
@@ -57,7 +58,8 @@ export async function POST(request: NextRequest) {
     }
 
     const data = await response.json();
-    return NextResponse.json({ url: data.url });
+    console.log("[ImageKit Upload] Response keys:", Object.keys(data), "fileId:", data.fileId, "filePath:", data.filePath);
+    return NextResponse.json({ url: data.url, fileId: data.fileId, filePath: data.filePath });
 
   } catch (error: any) {
     return NextResponse.json(

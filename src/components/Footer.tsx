@@ -1,6 +1,8 @@
 import Link from "next/link";
+import { getSetting } from "@/app/actions";
 
-export default function Footer() {
+export default async function Footer() {
+  const socials = await getSetting("socials_cms");
   const currentYear = new Date().getFullYear();
 
   return (
@@ -16,32 +18,42 @@ export default function Footer() {
               We engineer garments that exist outside the noise. Zero labels, zero branding, zero distraction. Only carbon-dense matte black fabrics, tailoring precision, and high-elasticity breathability designed for the avant-garde.
             </p>
             <div className="flex space-x-4 pt-2">
-              <a
-                href="https://instagram.com"
-                target="_blank"
-                rel="noreferrer"
-                className="hover:text-white transition-colors"
-              >
-                INSTAGRAM
-              </a>
-              <span className="text-white/10">/</span>
-              <a
-                href="https://twitter.com"
-                target="_blank"
-                rel="noreferrer"
-                className="hover:text-white transition-colors"
-              >
-                TWITTER (X)
-              </a>
-              <span className="text-white/10">/</span>
-              <a
-                href="https://youtube.com"
-                target="_blank"
-                rel="noreferrer"
-                className="hover:text-white transition-colors"
-              >
-                YOUTUBE
-              </a>
+              {socials?.instagram && (
+                <>
+                  <a
+                    href={socials.instagram}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="hover:text-white transition-colors"
+                  >
+                    INSTAGRAM
+                  </a>
+                  <span className="text-white/10">/</span>
+                </>
+              )}
+              {socials?.twitter && (
+                <>
+                  <a
+                    href={socials.twitter}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="hover:text-white transition-colors"
+                  >
+                    TWITTER (X)
+                  </a>
+                  <span className="text-white/10">/</span>
+                </>
+              )}
+              {socials?.youtube && (
+                <a
+                  href={socials.youtube}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="hover:text-white transition-colors"
+                >
+                  YOUTUBE
+                </a>
+              )}
             </div>
           </div>
 

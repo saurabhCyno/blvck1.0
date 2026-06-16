@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { adminToggleInquiryStatus } from "@/app/actions";
-import { Inbox, Eye, EyeOff, Calendar, User, Phone, Mail, ChevronDown, ChevronUp } from "lucide-react";
+import { adminToggleInquiryStatus, adminDeleteInquiry } from "@/app/actions";
+import { Inbox, Eye, EyeOff, Calendar, User, Phone, Mail, ChevronDown, ChevronUp, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 interface InquiriesClientProps {
@@ -14,6 +14,22 @@ export default function InquiriesClient({ initialInquiries }: InquiriesClientPro
   const [inquiries, setInquiries] = useState(initialInquiries);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [filterReadStatus, setFilterReadStatus] = useState<string>("All");
+
+  const handleDelete = async (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!confirm("Delete this inquiry permanently?")) return;
+    try {
+      const response = await adminDeleteInquiry(id);
+      if (response.success) {
+        setInquiries(inquiries.filter((inq) => inq._id !== id));
+        router.refresh();
+      } else {
+        alert("Failed to delete inquiry.");
+      }
+    } catch {
+      alert("Server communications error.");
+    }
+  };
 
   const handleToggleStatus = async (id: string, e: React.MouseEvent) => {
     e.stopPropagation(); // Avoid expanding/collapsing row when clicking button
@@ -169,12 +185,23 @@ export default function InquiriesClient({ initialInquiries }: InquiriesClientPro
                         <span>
                           LOGGED AT: {new Date(inq.createdAt).toLocaleString("en-US")}
                         </span>
-                        <button
-                          onClick={(e) => handleToggleStatus(inq._id, e)}
-                          className="hover:text-white transition-colors uppercase font-display tracking-widest"
-                        >
-                          MARK AS {isUnread ? "READ" : "UNREAD"}
-                        </button>
+                        <div className="flex items-center space-x-3">
+                          {inq.status === "Read" && (
+                            <button
+                              onClick={(e) => handleDelete(inq._id, e)}
+                              className="text-red-400/60 hover:text-red-400 transition-colors"
+                              title="Delete inquiry"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </button>
+                          )}
+                          <button
+                            onClick={(e) => handleToggleStatus(inq._id, e)}
+                            className="hover:text-white transition-colors uppercase font-display tracking-widest"
+                          >
+                            MARK AS {isUnread ? "READ" : "UNREAD"}
+                          </button>
+                        </div>
                       </div>
                     </div>
                   )}

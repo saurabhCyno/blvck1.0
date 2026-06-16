@@ -41,6 +41,7 @@ export default function ProductsClient({ initialProducts, categories }: Products
     gender: "Unisex",
     category: categories[0]?._id || "",
     images: [] as string[],
+    imageFileIds: [] as string[],
     specs: {
       brand: "PREMIUM BLVCK LABELS",
       type: "",
@@ -121,6 +122,7 @@ export default function ProductsClient({ initialProducts, categories }: Products
         setActiveProduct({
           ...activeProduct,
           images: [...(activeProduct.images || []), data.url],
+          imageFileIds: [...(activeProduct.imageFileIds || []), data.fileId],
         });
       } else {
         setError(data.error || "Failed to upload file.");
@@ -134,7 +136,8 @@ export default function ProductsClient({ initialProducts, categories }: Products
 
   const handleRemoveImage = (idx: number) => {
     const filteredImages = activeProduct.images.filter((_: any, i: number) => i !== idx);
-    setActiveProduct({ ...activeProduct, images: filteredImages });
+    const filteredFileIds = (activeProduct.imageFileIds || []).filter((_: any, i: number) => i !== idx);
+    setActiveProduct({ ...activeProduct, images: filteredImages, imageFileIds: filteredFileIds });
   };
 
   // Submit product creation / updates

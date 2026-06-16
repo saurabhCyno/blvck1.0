@@ -7,6 +7,7 @@ export interface IBlog {
   excerpt: string;
   content: string;
   featuredImage: string;
+  featuredImageFileId?: string;
   createdAt: Date;
 }
 
@@ -16,6 +17,7 @@ const BlogSchema = new mongoose.Schema<IBlog>({
   excerpt: { type: String, required: true },
   content: { type: String, required: true },
   featuredImage: { type: String },
+  featuredImageFileId: { type: String },
   createdAt: { type: Date, default: Date.now }
 });
 

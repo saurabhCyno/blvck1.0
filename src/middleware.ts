@@ -3,26 +3,30 @@ import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const isAuthenticated = request.cookies.get("admin_session")?.value === "authenticated";
+  const isAdmin = request.cookies.get("admin_session")?.value === "authenticated";
+  const isUser = !!request.cookies.get("user_session")?.value;
 
-  // Check if target is admin panel and not the login route
+  // Admin routes
   if (pathname.startsWith("/admin") && pathname !== "/admin/login") {
-    if (!isAuthenticated) {
+    if (!isAdmin) {
       return NextResponse.redirect(new URL("/admin/login", request.url));
     }
   }
 
-  // Redirect authenticated admin trying to access login
-  if (pathname === "/admin/login" && isAuthenticated) {
+  if (pathname === "/admin/login" && isAdmin) {
     return NextResponse.redirect(new URL("/admin/dashboard", request.url));
   }
 
-  // Handle redirect from bare /admin to dashboard
   if (pathname === "/admin") {
-    if (isAuthenticated) {
-      return NextResponse.redirect(new URL("/admin/dashboard", request.url));
-    } else {
-      return NextResponse.redirect(new URL("/admin/login", request.url));
+    return NextResponse.redirect(
+      new URL(isAdmin ? "/admin/dashboard" : "/admin/login", request.url)
+    );
+  }
+
+  // User account routes
+  if (pathname.startsWith("/account")) {
+    if (!isUser) {
+      return NextResponse.redirect(new URL("/auth/login", request.url));
     }
   }
 
@@ -30,5 +34,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*"],
+  matcher: ["/admin/:path*", "/account/:path*"],
 };
