@@ -19,6 +19,7 @@ export default function ProductsClient({ initialProducts, categories }: Products
   
   // File upload states
   const [uploading, setUploading] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
@@ -151,6 +152,7 @@ export default function ProductsClient({ initialProducts, categories }: Products
       return;
     }
 
+    setSaving(true);
     try {
       const response = await adminSaveProduct(activeProduct);
       if (response.success && response.product) {
@@ -173,6 +175,8 @@ export default function ProductsClient({ initialProducts, categories }: Products
       }
     } catch {
       setError("Server communications error.");
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -466,10 +470,11 @@ export default function ProductsClient({ initialProducts, categories }: Products
           <div className="flex space-x-4 pt-4 border-t border-white/10">
             <button
               type="submit"
-              className="bg-white text-black font-display font-black text-xs px-8 py-4.5 tracking-widest hover:bg-white/80 transition-colors uppercase flex items-center space-x-1.5 cursor-pointer"
+              disabled={saving}
+              className="bg-white text-black font-display font-black text-xs px-8 py-4.5 tracking-widest hover:bg-white/80 transition-colors uppercase flex items-center space-x-1.5 cursor-pointer disabled:opacity-50"
             >
               <Check className="h-4.5 w-4.5" />
-              <span>SAVE CHANGES</span>
+              <span>{saving ? "SAVING..." : "SAVE CHANGES"}</span>
             </button>
             <button
               type="button"
