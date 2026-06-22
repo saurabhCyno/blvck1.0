@@ -451,6 +451,21 @@ export async function adminGetReviews(): Promise<any[]> {
   }
 }
 
+export async function adminGetUsers(): Promise<any[]> {
+  const isAdmin = await checkAdminSession();
+  if (!isAdmin) throw new Error("Unauthorized access.");
+
+  await dbConnect();
+  try {
+    const users = await User.find({})
+      .select("-password -resetPasswordToken -resetPasswordExpires")
+      .sort({ createdAt: -1 });
+    return JSON.parse(JSON.stringify(users));
+  } catch {
+    return [];
+  }
+}
+
 export async function adminUpdateReviewStatus(reviewId: string, status: "Approved" | "Rejected"): Promise<{ success: boolean; error?: string }> {
   const isAdmin = await checkAdminSession();
   if (!isAdmin) throw new Error("Unauthorized access.");
