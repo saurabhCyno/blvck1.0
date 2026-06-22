@@ -69,17 +69,12 @@ export default async function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="hover:text-white transition-colors">
-                  SHIPPING & RETURNS
-                </Link>
-              </li>
-              <li>
-                <Link href="/about" className="hover:text-white transition-colors">
+                <Link href="/size-guide" className="hover:text-white transition-colors">
                   SIZE GUIDE
                 </Link>
               </li>
               <li>
-                <Link href="/about" className="hover:text-white transition-colors">
+                <Link href="/fabric-care" className="hover:text-white transition-colors">
                   FABRIC & CARE
                 </Link>
               </li>
@@ -119,13 +114,13 @@ export default async function Footer() {
         {/* Divider & Copyright */}
         <div className="border-t border-white/5 mt-16 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs tracking-widest uppercase text-white/30">
-            © {currentYear} BLVCK. COUTURE DEV. LAB. ALL RIGHTS RESERVED.
+            © {currentYear} BLVCK. ALL RIGHTS RESERVED.
           </p>
           <div className="flex space-x-6 text-xs tracking-widest uppercase text-white/30">
-            <Link href="/about" className="hover:text-white transition-colors">
+            <Link href="/privacy" className="hover:text-white transition-colors">
               PRIVACY POLICY
             </Link>
-            <Link href="/about" className="hover:text-white transition-colors">
+            <Link href="/terms" className="hover:text-white transition-colors">
               TERMS OF SERVICE
             </Link>
           </div>

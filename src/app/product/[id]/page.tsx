@@ -2,7 +2,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CartDrawer from "@/components/CartDrawer";
 import ProductDetailClient from "./ProductDetailClient";
-import { getProductById, getRelatedProducts, getSetting } from "@/app/actions";
+import { getProductById, getRelatedProducts, getSetting, getProductReviews } from "@/app/actions";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 
@@ -50,6 +50,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const contactCMS = await getSetting("contacts_cms");
   const adminPhone = contactCMS?.phone || "+919876543210";
 
+  // Fetch approved reviews
+  const initialReviews = await getProductReviews(product._id);
+
   return (
     <>
       <Header />
@@ -60,6 +63,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
           product={product}
           relatedProducts={relatedProducts}
           adminPhone={adminPhone}
+          initialReviews={initialReviews}
         />
       </main>
 

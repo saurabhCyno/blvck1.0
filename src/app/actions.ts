@@ -10,14 +10,17 @@ import { Inquiry } from "@/models/Inquiry";
 import { Blog } from "@/models/Blog";
 import { Setting } from "@/models/Setting";
 import { User } from "@/models/User";
+import { Review } from "@/models/Review";
 import { HeroSlide } from "@/models/HeroSlide";
 import bcrypt from "bcryptjs";
 import ImageKit from "@imagekit/nodejs";
+import crypto from "crypto";
 import {
   sendEmail,
   buildOrderConfirmationHtml,
   buildAdminNotificationHtml,
   buildStatusUpdateHtml,
+  buildPasswordResetHtml,
   ADMIN_EMAIL,
 } from "@/lib/mail";
 
@@ -266,6 +269,163 @@ export async function updateUserProfile(formData: { name: string; phone: string 
   await dbConnect();
   await User.findByIdAndUpdate(user.id, { name: formData.name, phone: formData.phone });
   return { success: true };
+}
+
+export async function requestPasswordReset(email: string): Promise<{ success: boolean; message?: string; error?: string }> {
+  await dbConnect();
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      // Return success even if email not found to avoid user enumeration
+      return { success: true, message: "If an account exists for that email, a password reset link has been sent." };
+    }
+
+    const token = crypto.randomBytes(32).toString("hex");
+    const expires = new Date(Date.now() + 3600000); // 1 hour
+
+    user.resetPasswordToken = token;
+    user.resetPasswordExpires = expires;
+    await user.save();
+
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+    const resetLink = `${appUrl}/auth/reset-password?token=${token}`;
+
+    try {
+      await sendEmail({
+        to: user.email,
+        subject: "Reset Your Password - BLVCK",
+        html: buildPasswordResetHtml(resetLink, user.name),
+      });
+    } catch (emailErr) {
+      console.warn("Failed to send password reset email:", emailErr);
+    }
+
+    // In development mode or if SMTP is not configured, print reset link to console for easy testing
+    console.log("==========================================");
+    console.log(`[PASSWORD RESET LINK for ${user.email}]: ${resetLink}`);
+    console.log("==========================================");
+
+    return { success: true, message: "If an account exists for that email, a password reset link has been sent." };
+  } catch (error: any) {
+    return { success: false, error: error.message || "Something went wrong." };
+  }
+}
+
+export async function resetPassword(token: string, password: string): Promise<{ success: boolean; error?: string }> {
+  await dbConnect();
+  try {
+    const user = await User.findOne({
+      resetPasswordToken: token,
+      resetPasswordExpires: { $gt: new Date() },
+    });
+
+    if (!user) {
+      return { success: false, error: "Invalid or expired reset token." };
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 12);
+    user.password = hashedPassword;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
+    await user.save();
+
+    return { success: true };
+  } catch (error: any) {
+    return { success: false, error: error.message || "Failed to reset password." };
+  }
+}
+
+export async function validateResetToken(token: string): Promise<{ success: boolean; error?: string }> {
+  await dbConnect();
+  try {
+    const user = await User.findOne({
+      resetPasswordToken: token,
+      resetPasswordExpires: { $gt: new Date() },
+    });
+
+    if (!user) {
+      return { success: false, error: "Invalid or expired reset token." };
+    }
+
+    return { success: true };
+  } catch (error: any) {
+    return { success: false, error: error.message || "Failed to validate token." };
+  }
+}
+
+export async function postReview(productId: string, rating: number, comment: string): Promise<{ success: boolean; error?: string }> {
+  const user = await checkUserSession();
+  if (!user) {
+    return { success: false, error: "Not authenticated." };
+  }
+
+  await dbConnect();
+  try {
+    await Review.create({
+      productId,
+      userId: user.id,
+      userName: user.name,
+      rating,
+      comment,
+      status: "Pending",
+    });
+    return { success: true };
+  } catch (error: any) {
+    return { success: false, error: error.message || "Failed to submit review." };
+  }
+}
+
+export async function getProductReviews(productId: string): Promise<any[]> {
+  await dbConnect();
+  try {
+    const reviews = await Review.find({ productId, status: "Approved" }).sort({ createdAt: -1 });
+    return JSON.parse(JSON.stringify(reviews));
+  } catch {
+    return [];
+  }
+}
+
+export async function adminGetReviews(): Promise<any[]> {
+  const isAdmin = await checkAdminSession();
+  if (!isAdmin) throw new Error("Unauthorized access.");
+
+  await dbConnect();
+  try {
+    const reviews = await Review.find({})
+      .populate("productId", "title")
+      .sort({ createdAt: -1 });
+    return JSON.parse(JSON.stringify(reviews));
+  } catch {
+    return [];
+  }
+}
+
+export async function adminUpdateReviewStatus(reviewId: string, status: "Approved" | "Rejected"): Promise<{ success: boolean; error?: string }> {
+  const isAdmin = await checkAdminSession();
+  if (!isAdmin) throw new Error("Unauthorized access.");
+
+  await dbConnect();
+  try {
+    await Review.findByIdAndUpdate(reviewId, { status });
+    revalidatePath("/admin/reviews");
+    return { success: true };
+  } catch (error: any) {
+    return { success: false, error: error.message || "Failed to update review status." };
+  }
+}
+
+export async function adminDeleteReview(reviewId: string): Promise<{ success: boolean; error?: string }> {
+  const isAdmin = await checkAdminSession();
+  if (!isAdmin) throw new Error("Unauthorized access.");
+
+  await dbConnect();
+  try {
+    await Review.findByIdAndDelete(reviewId);
+    revalidatePath("/admin/reviews");
+    return { success: true };
+  } catch (error: any) {
+    return { success: false, error: error.message || "Failed to delete review." };
+  }
 }
 
 // --- ADMIN BLOG ACTIONS ---

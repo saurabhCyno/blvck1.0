@@ -11,4 +11,5 @@ const nextConfig: NextConfig = {
   },
 };
 
+// Force reload config to pick up schema updates
 export default nextConfig;

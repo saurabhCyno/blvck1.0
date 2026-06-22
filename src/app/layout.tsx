@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Bebas_Neue } from "next/font/google";
+import { Suspense } from "react";
 import "./globals.css";
+import NavigationProgress from "@/components/NavigationProgress";
 
 const bebasNeue = Bebas_Neue({
   weight: "400",
@@ -30,6 +32,9 @@ export default function RootLayout({
       className={`${bebasNeue.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-black text-white selection:bg-white selection:text-black">
+        <Suspense fallback={null}>
+          <NavigationProgress />
+        </Suspense>
         {children}
       </body>
     </html>

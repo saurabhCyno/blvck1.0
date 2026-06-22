@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { adminLogout } from "@/app/actions";
-import { LayoutDashboard, Tag, ClipboardList, Settings, Inbox, LogOut, Shirt, FileText, Monitor } from "lucide-react";
+import { LayoutDashboard, Tag, ClipboardList, Settings, Inbox, LogOut, Shirt, FileText, Monitor, MessageSquare } from "lucide-react";
 
 interface AdminLayoutWrapperProps {
   children: React.ReactNode;
@@ -30,6 +30,7 @@ export default function AdminLayoutWrapper({ children }: AdminLayoutWrapperProps
     { name: "PRODUCTS", href: "/admin/products", icon: Shirt },
     { name: "CATEGORIES", href: "/admin/categories", icon: Tag },
     { name: "ORDERS", href: "/admin/orders", icon: ClipboardList },
+    { name: "REVIEWS", href: "/admin/reviews", icon: MessageSquare },
     { name: "INQUIRIES", href: "/admin/inquiries", icon: Inbox },
     { name: "CMS SETTINGS", href: "/admin/settings", icon: Settings },
     { name: "EDITORIALS", href: "/admin/blogs", icon: FileText },

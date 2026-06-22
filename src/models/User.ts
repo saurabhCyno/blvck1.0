@@ -7,6 +7,8 @@ export interface IUser {
   phone: string;
   password: string;
   createdAt: Date;
+  resetPasswordToken?: string;
+  resetPasswordExpires?: Date;
 }
 
 const UserSchema = new mongoose.Schema<IUser>({
@@ -15,6 +17,11 @@ const UserSchema = new mongoose.Schema<IUser>({
   phone: { type: String, required: true },
   password: { type: String, required: true },
   createdAt: { type: Date, default: Date.now },
+  resetPasswordToken: { type: String },
+  resetPasswordExpires: { type: Date },
 });
 
-export const User = mongoose.models.User || mongoose.model("User", UserSchema);
+if (mongoose.models && mongoose.models.User) {
+  delete (mongoose.models as any).User;
+}
+export const User = mongoose.model("User", UserSchema);

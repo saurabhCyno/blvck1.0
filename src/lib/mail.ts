@@ -77,7 +77,7 @@ function baseTemplate(title: string, body: string): string {
       ${body}
     </div>
     <div style="padding:20px 40px;border-top:1px solid #1a1a1a;text-align:center;font-size:11px;color:#555;letter-spacing:1px">
-      COUTURE DEV. LAB &mdash; ALL RIGHTS RESERVED
+      BLVCK &mdash; ALL RIGHTS RESERVED
     </div>
   </div>`;
 }
@@ -169,6 +169,26 @@ export function buildStatusUpdateHtml(
       </div>
     </div>
     <p style="color:#666;font-size:12px;line-height:1.6;margin-top:16px">If you have any questions, please contact our concierge team.</p>
+    `
+  );
+}
+
+export function buildPasswordResetHtml(resetLink: string, customerName: string): string {
+  return baseTemplate(
+    "Reset Your Password",
+    `
+    <p style="color:#aaa;font-size:13px;line-height:1.6">Dear ${customerName},</p>
+    <p style="color:#aaa;font-size:13px;line-height:1.6">We received a request to reset the password for your BLVCK account. Click the button below to choose a new password.</p>
+    
+    <div style="text-align:center;margin:32px 0;">
+      <a href="${resetLink}" style="display:inline-block;padding:12px 32px;background:#fff;color:#000;text-decoration:none;font-size:11px;font-weight:bold;letter-spacing:2px;text-transform:uppercase;transition:all 0.2s ease;">
+        Reset Password
+      </a>
+    </div>
+    
+    <p style="color:#aaa;font-size:13px;line-height:1.6">This link is valid for 1 hour. If you did not request a password reset, you can safely ignore this email; your password will remain unchanged.</p>
+    <p style="color:#666;font-size:12px;line-height:1.6;margin-top:24px">If the button above does not work, copy and paste the following URL into your browser:</p>
+    <p style="color:#888;font-size:11px;word-break:break-all;font-family:monospace;margin-top:8px;">${resetLink}</p>
     `
   );
 }

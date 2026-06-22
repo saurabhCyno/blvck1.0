@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { IProduct } from "@/models/Product";
@@ -9,17 +9,20 @@ import { getTransformedImage } from "@/utils/imagekit";
 import { useCartStore } from "@/store/useCartStore";
 import { Plus, Minus, ShieldCheck, RefreshCw, Truck, ChevronDown, ChevronUp } from "lucide-react";
 import ProductCard from "@/components/ProductCard";
+import { checkUserSession, postReview } from "@/app/actions";
 
 interface ProductDetailClientProps {
   product: IProduct;
   relatedProducts: IProduct[];
   adminPhone: string;
+  initialReviews: any[];
 }
 
 export default function ProductDetailClient({
   product,
   relatedProducts,
   adminPhone,
+  initialReviews,
 }: ProductDetailClientProps) {
   const addItem = useCartStore((state) => state.addItem);
   const setCartOpen = useCartStore((state) => state.setCartOpen);
@@ -31,6 +34,42 @@ export default function ProductDetailClient({
   // Accordion toggle states
   const [specsOpen, setSpecsOpen] = useState(true);
   const [deliveryOpen, setDeliveryOpen] = useState(false);
+
+  const [reviews, setReviews] = useState(initialReviews);
+  const [user, setUser] = useState<any | null>(null);
+  const [rating, setRating] = useState(5);
+  const [comment, setComment] = useState("");
+  const [reviewError, setReviewError] = useState("");
+  const [reviewSuccess, setReviewSuccess] = useState(false);
+  const [submittingReview, setSubmittingReview] = useState(false);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const u = await checkUserSession();
+      setUser(u);
+    };
+    fetchUser();
+  }, []);
+
+  const handleReviewSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setReviewError("");
+    setSubmittingReview(true);
+    try {
+      const res = await postReview(product._id, rating, comment);
+      if (res.success) {
+        setReviewSuccess(true);
+        setComment("");
+        setRating(5);
+      } else {
+        setReviewError(res.error || "Failed to submit review.");
+      }
+    } catch {
+      setReviewError("Server error.");
+    } finally {
+      setSubmittingReview(false);
+    }
+  };
 
   const images = product.images?.length > 0 ? product.images : [""];
   const activeImage = images[activeImageIdx];
@@ -335,6 +374,163 @@ export default function ProductDetailClient({
           </div>
         </div>
       </div>
+
+      {/* Reviews Section */}
+      <section className="mt-24 border-t border-white/10 pt-16">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+          {/* Left Column: Reviews List */}
+          <div className="lg:col-span-7 space-y-8">
+            <div className="space-y-1 mb-8">
+              <span className="font-display text-[10px] text-white/40 tracking-widest uppercase">
+                CUSTOMER FEEDBACK
+              </span>
+              <h3 className="font-display text-xl font-black tracking-widest-luxury text-white">
+                REVIEWS ({reviews.length})
+              </h3>
+            </div>
+
+            {reviews.length === 0 ? (
+              <p className="text-xs text-white/45 font-body">
+                No reviews yet for this product. Be the first to share your thoughts.
+              </p>
+            ) : (
+              <div className="space-y-8 max-h-[500px] overflow-y-auto pr-4 scrollbar-thin">
+                {reviews.map((rev) => (
+                  <div key={rev._id} className="border-b border-white/5 pb-6 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-display tracking-widest text-white uppercase font-black">
+                        {rev.userName}
+                      </span>
+                      <div className="flex items-center space-x-1">
+                        {Array.from({ length: 5 }).map((_, i) => (
+                          <span
+                            key={i}
+                            className={`text-sm ${
+                              i < rev.rating ? "text-white" : "text-white/20"
+                            }`}
+                          >
+                            ★
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    <p className="text-xs text-white/60 font-body leading-relaxed">
+                      {rev.comment}
+                    </p>
+                    <div className="text-[10px] text-white/30 font-body">
+                      {new Date(rev.createdAt).toLocaleDateString(undefined, {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                      })}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Right Column: Write Review Form */}
+          <div className="lg:col-span-5 border border-white/10 p-8 bg-neutral-950/40">
+            <div className="space-y-1 mb-6">
+              <span className="font-display text-[10px] text-white/40 tracking-widest uppercase">
+                SHARE YOUR EXPERIENCE
+              </span>
+              <h3 className="font-display text-sm font-black tracking-widest text-white uppercase">
+                WRITE A REVIEW
+              </h3>
+            </div>
+
+            {user ? (
+              <form onSubmit={handleReviewSubmit} className="space-y-5">
+                {reviewError && (
+                  <p className="text-xs text-red-400 bg-red-500/5 border border-red-500/20 px-3 py-2">
+                    {reviewError}
+                  </p>
+                )}
+
+                {/* Rating stars selector */}
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-display tracking-widest text-white/50 uppercase block">
+                    Rating
+                  </label>
+                  <div className="flex space-x-1.5">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <button
+                        type="button"
+                        key={star}
+                        onClick={() => setRating(star)}
+                        className="text-xl focus:outline-hidden transition-transform active:scale-95 hover:scale-110"
+                      >
+                        <span className={star <= rating ? "text-white" : "text-white/20"}>★</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-display tracking-widest text-white/50 uppercase">
+                    Review Description
+                  </label>
+                  <textarea
+                    value={comment}
+                    onChange={(e) => setComment(e.target.value)}
+                    required
+                    rows={4}
+                    className="w-full bg-black border border-white/10 px-3 py-2.5 text-xs text-white focus:outline-hidden focus:border-white/30 resize-none font-body"
+                    placeholder="Describe your experience with this matte drop..."
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={submittingReview}
+                  className="w-full border border-white/20 bg-white/5 py-3 text-[10px] text-white hover:bg-white/10 transition-colors uppercase tracking-widest font-display font-black disabled:opacity-30 cursor-pointer"
+                >
+                  {submittingReview ? "Submitting..." : "Submit Review"}
+                </button>
+              </form>
+            ) : (
+              <div className="text-center py-8 space-y-4">
+                <p className="text-xs text-white/40 font-body">
+                  Please sign in to provide a review for this product.
+                </p>
+                <Link
+                  href={`/auth/login?redirect=${encodeURIComponent(`/product/${product._id}`)}`}
+                  className="inline-block border border-white/20 bg-white/5 px-6 py-3 text-[10px] text-white hover:bg-white hover:text-black transition-all uppercase tracking-widest font-display font-black rounded-none cursor-pointer"
+                >
+                  Sign In
+                </Link>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* Review Success Popup Modal */}
+      {reviewSuccess && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-xs px-4">
+          <div className="bg-neutral-950 border border-white/10 p-8 max-w-sm w-full text-center space-y-6 animate-fadeIn">
+            <div className="mx-auto w-12 h-12 border border-white/20 flex items-center justify-center text-white text-lg font-bold">
+              ✓
+            </div>
+            <div className="space-y-2">
+              <h3 className="font-display text-sm tracking-widest text-white uppercase font-black">
+                REVIEW SUBMITTED
+              </h3>
+              <p className="text-xs text-white/50 leading-relaxed font-body">
+                Thankyou for providing your valuable review.
+              </p>
+            </div>
+            <button
+              onClick={() => setReviewSuccess(false)}
+              className="w-full bg-white text-black font-display font-black text-[10px] tracking-widest py-3 uppercase hover:bg-white/80 transition-colors cursor-pointer"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Recommendation Row */}
       {relatedProducts.length > 0 && (
