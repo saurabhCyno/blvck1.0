@@ -4,8 +4,8 @@ import CartDrawer from "@/components/CartDrawer";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | BLVCK",
-  description: "BLVCK privacy policy — how we handle your data, cookies, and personal information.",
+  title: "Privacy Policy | BLVCK CORE",
+  description: "BLVCK CORE privacy policy — how we handle your data, cookies, and personal information.",
 };
 
 export default function PrivacyPage() {
@@ -17,7 +17,7 @@ export default function PrivacyPage() {
       <main className="bg-black text-white flex-1 font-body">
         <section className="mx-auto max-w-4xl px-4 pt-24 pb-12 sm:px-6 lg:px-8 border-b border-white/10">
           <span className="font-display text-xs text-white/45 tracking-widest uppercase">
-            BLVCK LABS CORP
+            BLVCK CORE LABS CORP
           </span>
           <h1 className="font-display text-4xl sm:text-5xl font-black tracking-widest-luxury text-white mt-2">
             PRIVACY POLICY

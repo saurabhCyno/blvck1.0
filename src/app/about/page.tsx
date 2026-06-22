@@ -5,7 +5,7 @@ import { getSetting } from "../actions";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Our Manifesto & Lab | BLVCK",
+  title: "Our Manifesto & Lab | BLVCK CORE",
   description: "Learn about our carbon-dense matte black material engineering and the design philosophy driving the silent revolution.",
 };
 
@@ -16,7 +16,7 @@ export default async function AboutPage() {
 
   // Fallback structures if setting is empty or pending administrator configuration
   const manifestoText = cmsData?.manifesto || "WE CRAFT THE VANGUARD. WE ARE THE DARKNESS. NO BRANDS. JUST APPAREL.";
-  const historyText = cmsData?.history || "BLVCK was established in 2026 as an architectural reaction to traditional visual weight. We focus exclusively on carbon-dense premium breathable apparel that conforms to the human shape. Engineered for comfort, finished in deep absolute matte black.";
+  const historyText = cmsData?.history || "BLVCK CORE was established in 2026 as an architectural reaction to traditional visual weight. We focus exclusively on carbon-dense premium breathable apparel that conforms to the human shape. Engineered for comfort, finished in deep absolute matte black.";
   const teamList = cmsData?.team || [
     { name: "K. VAN DER WEYDEN", role: "CHIEF TEXTILE ARCHITECT" },
     { name: "M. NOIR", role: "CREATIVE & BRAND DIRECTOR" },
@@ -32,7 +32,7 @@ export default async function AboutPage() {
         {/* Hero Title */}
         <section className="mx-auto max-w-7xl px-4 pt-24 pb-12 sm:px-6 lg:px-8 border-b border-white/10 text-center sm:text-left">
           <span className="font-display text-xs text-white/45 tracking-widest uppercase">
-            BLVCK LABS CORP
+            BLVCK CORE LABS CORP
           </span>
           <h1 className="font-display text-4xl sm:text-6xl font-black tracking-widest-luxury text-white mt-2">
             THE MANIFESTO

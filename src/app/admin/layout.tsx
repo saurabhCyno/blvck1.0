@@ -2,7 +2,7 @@ import AdminLayoutWrapper from "@/components/AdminLayoutWrapper";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Administrator Dashboard | BLVCK",
+  title: "Administrator Dashboard | BLVCK CORE",
   description: "Secure administrative control ecosystem for products, orders, categories, and site CMS.",
 };
 

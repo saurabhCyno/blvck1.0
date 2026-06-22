@@ -5,7 +5,7 @@ import { Metadata } from "next";
 import { Suspense } from "react";
 
 export const metadata: Metadata = {
-  title: "Your Bag & Checkout | BLVCK",
+  title: "Your Bag & Checkout | BLVCK CORE",
   description: "Review items in your bag and proceed to cash-on-delivery checkout.",
 };
 

@@ -5,8 +5,8 @@ import { Ruler, Shirt, User, Dumbbell } from "lucide-react";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Size Guide | BLVCK",
-  description: "BLVCK size guide — find your perfect fit with our detailed measurement charts for men, women, and unisex apparel.",
+  title: "Size Guide | BLVCK CORE",
+  description: "BLVCK CORE size guide — find your perfect fit with our detailed measurement charts for men, women, and unisex apparel.",
 };
 
 const sizeData = {
@@ -88,7 +88,7 @@ export default function SizeGuidePage() {
         {/* Hero */}
         <section className="mx-auto max-w-7xl px-4 pt-24 pb-12 sm:px-6 lg:px-8 border-b border-white/10">
           <span className="font-display text-xs text-white/45 tracking-widest uppercase">
-            BLVCK LABS CORP
+            BLVCK CORE LABS CORP
           </span>
           <div className="flex items-center gap-4 mt-2">
             <Ruler className="h-8 w-8 text-white/30" />
@@ -97,7 +97,7 @@ export default function SizeGuidePage() {
             </h1>
           </div>
           <p className="text-white/50 text-sm mt-4 max-w-2xl leading-relaxed">
-            Find your perfect carbon-fit. All BLVCK garments are engineered with precision tailoring.
+            Find your perfect carbon-fit. All BLVCK CORE garments are engineered with precision tailoring.
             Measure a similar garment you already own and compare with our charts below.
           </p>
         </section>

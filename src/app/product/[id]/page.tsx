@@ -20,15 +20,15 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
   const product = await getProductById(resolvedParams.id);
   if (!product) {
     return {
-      title: "Product Not Found | BLVCK",
+      title: "Product Not Found | BLVCK CORE",
     };
   }
 
   return {
-    title: `${product.title} | BLVCK`,
+    title: `${product.title} | BLVCK CORE`,
     description: product.description,
     openGraph: {
-      title: `${product.title} | BLVCK`,
+      title: `${product.title} | BLVCK CORE`,
       description: product.description,
       images: product.images?.[0] ? [{ url: product.images[0] }] : [],
     },

@@ -44,7 +44,7 @@ export default function ProductsClient({ initialProducts, categories }: Products
     images: [] as string[],
     imageFileIds: [] as string[],
     specs: {
-      brand: "PREMIUM BLVCK LABELS",
+      brand: "PREMIUM BLVCK CORE LABELS",
       type: "",
       sleeve: "",
       fit: "",

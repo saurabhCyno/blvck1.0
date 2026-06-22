@@ -64,7 +64,7 @@ export default function AccountClient({ user: initialUser, initialOrders }: Acco
       <header className="border-b border-white/10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <Link href="/" className="font-display text-xl font-black tracking-widest text-white">
-            BLVCK
+            BLVCK CORE
           </Link>
           <div className="flex items-center space-x-4">
             <Link href="/shop" className="text-xs text-white/50 hover:text-white transition-colors tracking-widest uppercase font-display">

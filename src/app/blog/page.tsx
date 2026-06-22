@@ -8,8 +8,8 @@ import { getTransformedImage } from "@/utils/imagekit";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Editorials & Research | BLVCK",
-  description: "Read the latest essays, physical tests, and design reflections from the BLVCK developmental labs.",
+  title: "Editorials & Research | BLVCK CORE",
+  description: "Read the latest essays, physical tests, and design reflections from the BLVCK CORE developmental labs.",
 };
 
 export const revalidate = 0; // Prevent Next.js from caching editorials updates

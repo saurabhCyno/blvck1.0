@@ -44,7 +44,7 @@ export default function AdminLayoutWrapper({ children }: AdminLayoutWrapperProps
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center space-x-3">
               <Link href="/admin/dashboard" className="font-display text-xl font-black tracking-widest text-white">
-                BLVCK <span className="text-stroke-white select-none">ADMIN</span>
+                BLVCK CORE <span className="text-stroke-white select-none">ADMIN</span>
               </Link>
               <span className="text-xs bg-white/10 text-white/60 px-2 py-0.5 font-display tracking-widest">
                 v1.0.0

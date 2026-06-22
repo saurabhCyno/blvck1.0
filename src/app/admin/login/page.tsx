@@ -48,7 +48,7 @@ export default function AdminLoginPage() {
             ADMIN SECURITY ACCESS
           </span>
           <h1 className="font-display text-3xl font-black tracking-widest text-white uppercase">
-            BLVCK SECURE
+            BLVCK CORE SECURE
           </h1>
         </div>
 

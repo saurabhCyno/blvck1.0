@@ -23,15 +23,15 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   const post = await getBlogBySlug(resolvedParams.slug);
   if (!post) {
     return {
-      title: "Essay Not Found | BLVCK",
+      title: "Essay Not Found | BLVCK CORE",
     };
   }
 
   return {
-    title: `${post.title} | BLVCK`,
+    title: `${post.title} | BLVCK CORE`,
     description: post.excerpt,
     openGraph: {
-      title: `${post.title} | BLVCK`,
+      title: `${post.title} | BLVCK CORE`,
       description: post.excerpt,
       images: post.featuredImage ? [{ url: post.featuredImage }] : [],
     },

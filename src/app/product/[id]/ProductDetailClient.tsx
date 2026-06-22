@@ -154,7 +154,7 @@ export default function ProductDetailClient({
           {/* Title & Price */}
           <div className="space-y-4">
             <span className="font-display text-xs text-white/45 tracking-widest uppercase">
-              {product.specs?.brand || "PREMIUM BLVCK LABELS"}
+              {product.specs?.brand || "PREMIUM BLVCK CORE LABELS"}
             </span>
             <h1 className="font-display text-3xl sm:text-4xl font-black tracking-widest-luxury text-white">
               {product.title}

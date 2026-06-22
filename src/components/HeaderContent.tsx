@@ -57,7 +57,7 @@ export default function HeaderContent({ socials = {} }: { socials?: Socials }) {
               href="/"
               className="font-display text-3xl font-black tracking-widest-luxury text-white hover:opacity-85 transition-opacity inline-block"
             >
-              BLVCK
+              BLVCK CORE
             </Link>
           </div>
 

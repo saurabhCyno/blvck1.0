@@ -31,7 +31,7 @@ export default function HeroSliderClient({ slides }: { slides: Slide[] }) {
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-black/80" />
         <div className="relative z-10 text-center max-w-xl px-4">
           <h1 className="font-display text-4xl sm:text-6xl font-black text-white tracking-widest-luxury">
-            BLVCK
+            BLVCK CORE
           </h1>
           <p className="font-body text-xs text-white/50 mt-4">
             No slides configured. Add them in the admin panel.

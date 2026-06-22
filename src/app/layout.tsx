@@ -11,11 +11,11 @@ const bebasNeue = Bebas_Neue({
 });
 
 export const metadata: Metadata = {
-  title: "BLVCK | Ultra-Premium Avant-Garde Minimalist Luxury Apparel",
+  title: "BLVCK CORE | Ultra-Premium Avant-Garde Minimalist Luxury Apparel",
   description: "Experience the pinnacle of luxury with our curated collection of ultra-premium, highly breathable, carbon-dense matte black clothing.",
   metadataBase: new URL("https://blvck.vercel.app"),
   openGraph: {
-    title: "BLVCK | Ultra-Premium Black Apparel",
+    title: "BLVCK CORE | Ultra-Premium Black Apparel",
     description: "Avant-Garde Minimalist luxury black clothing engineered for breathability and fit.",
     images: ["/og-image.jpg"],
   },

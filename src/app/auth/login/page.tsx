@@ -38,7 +38,7 @@ function LoginFormContent() {
     <div className="w-full max-w-sm border border-white/10 p-8">
       <div className="text-center mb-8">
         <Link href="/" className="font-display text-2xl font-black tracking-widest text-white">
-          BLVCK
+          BLVCK CORE
         </Link>
         <p className="text-white/45 text-xs mt-2 font-body">Sign in to your account</p>
       </div>

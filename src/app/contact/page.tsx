@@ -7,7 +7,7 @@ import { Mail, Phone, MapPin, Clock } from "lucide-react";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Contact Concierge | BLVCK",
+  title: "Contact Concierge | BLVCK CORE",
   description: "Get in touch with our design studio, support desk, or media relations team.",
 };
 

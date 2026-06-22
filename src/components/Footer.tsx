@@ -114,7 +114,7 @@ export default async function Footer() {
         {/* Divider & Copyright */}
         <div className="border-t border-white/5 mt-16 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs tracking-widest uppercase text-white/30">
-            © {currentYear} BLVCK. ALL RIGHTS RESERVED.
+            © {currentYear} BLVCK CORE. ALL RIGHTS RESERVED.
           </p>
           <div className="flex space-x-6 text-xs tracking-widest uppercase text-white/30">
             <Link href="/privacy" className="hover:text-white transition-colors">

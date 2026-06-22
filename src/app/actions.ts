@@ -206,7 +206,7 @@ export async function userSignup(formData: {
     try {
       await sendEmail({
         to: user.email,
-        subject: "Welcome to BLVCK",
+        subject: "Welcome to BLVCK CORE",
         html: buildWelcomeHtml(user.name),
       });
     } catch (emailErr) {
@@ -305,7 +305,7 @@ export async function requestPasswordReset(email: string): Promise<{ success: bo
     try {
       await sendEmail({
         to: user.email,
-        subject: "Reset Your Password - BLVCK",
+        subject: "Reset Your Password - BLVCK CORE",
         html: buildPasswordResetHtml(resetLink, user.name),
       });
     } catch (emailErr) {
@@ -344,7 +344,7 @@ export async function resetPassword(token: string, password: string): Promise<{ 
     try {
       await sendEmail({
         to: user.email,
-        subject: "Password Changed - BLVCK",
+        subject: "Password Changed - BLVCK CORE",
         html: buildPasswordChangedHtml(user.name),
       });
     } catch (emailErr) {
@@ -1015,7 +1015,7 @@ export async function seedDatabase() {
       key: "about_cms",
       value: {
         manifesto: "WE CRAFT THE VANGUARD. WE ARE THE DARKNESS. NO BRANDS. JUST APPAREL.",
-        history: "BLVCK was established in 2026 as an architectural reaction to traditional visual weight. We focus exclusively on carbon-dense premium breathable apparel that conforms to the human shape. Engineered for comfort, finished in deep absolute matte black.",
+        history: "BLVCK CORE was established in 2026 as an architectural reaction to traditional visual weight. We focus exclusively on carbon-dense premium breathable apparel that conforms to the human shape. Engineered for comfort, finished in deep absolute matte black.",
         team: [
           { name: "K. VAN DER WEYDEN", role: "CHIEF TEXTILE ARCHITECT" },
           { name: "M. NOIR", role: "CREATIVE & BRAND DIRECTOR" },
@@ -1095,7 +1095,7 @@ When branding is removed, only the form remains. We build shapes, lines, and tex
       ],
       imageFileIds: [],
       specs: {
-        brand: "PREMIUM BLVCK LABELS",
+        brand: "PREMIUM BLVCK CORE LABELS",
         type: "PULLOVER HOODIE",
         sleeve: "LONG SLEEVE WITH RIBBED CUFFS",
         fit: "TAILORED RELAXED LUXURY FIT",
@@ -1121,7 +1121,7 @@ When branding is removed, only the form remains. We build shapes, lines, and tex
       images: [],
       imageFileIds: [],
       specs: {
-        brand: "PREMIUM BLVCK LABELS",
+        brand: "PREMIUM BLVCK CORE LABELS",
         type: "HEAVYWEIGHT TEE",
         sleeve: "SHORT SLEEVE DEEP SET",
         fit: "TIGHT-TAILORED SHOULDER BOX-FIT HEM",
@@ -1147,7 +1147,7 @@ When branding is removed, only the form remains. We build shapes, lines, and tex
       images: [],
       imageFileIds: [],
       specs: {
-        brand: "PREMIUM BLVCK LABELS",
+        brand: "PREMIUM BLVCK CORE LABELS",
         type: "CREWNECK SWEATSHIRT",
         sleeve: "RAGLAN COUTURE SLEEVE",
         fit: "STRUCTURAL LUXURY POSTURE",
@@ -1173,7 +1173,7 @@ When branding is removed, only the form remains. We build shapes, lines, and tex
       images: [],
       imageFileIds: [],
       specs: {
-        brand: "PREMIUM BLVCK LABELS",
+        brand: "PREMIUM BLVCK CORE LABELS",
         type: "LOUNGE JOGGERS",
         sleeve: "N/A",
         fit: "TAPERED SLIM FIT JOGGER",
@@ -1199,7 +1199,7 @@ When branding is removed, only the form remains. We build shapes, lines, and tex
       images: [],
       imageFileIds: [],
       specs: {
-        brand: "PREMIUM BLVCK LABELS",
+        brand: "PREMIUM BLVCK CORE LABELS",
         type: "DRAPED DRESS",
         sleeve: "SLEEVELESS ASYMMETRICAL",
         fit: "FLOWING COUTURE OVERLAY",
@@ -1225,7 +1225,7 @@ When branding is removed, only the form remains. We build shapes, lines, and tex
       images: [],
       imageFileIds: [],
       specs: {
-        brand: "PREMIUM BLVCK LABELS",
+        brand: "PREMIUM BLVCK CORE LABELS",
         type: "TRENCH OVERCOAT",
         sleeve: "LONG SLEEVE FORMAL SET",
         fit: "SHARP TAILORED BOX SHOULDER",

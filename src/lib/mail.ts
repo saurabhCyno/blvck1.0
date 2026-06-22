@@ -28,7 +28,7 @@ export async function sendEmail({
   }
 
   await transporter.sendMail({
-    from: `"BLVCK" <${FROM_EMAIL}>`,
+    from: `"BLVCK CORE" <${FROM_EMAIL}>`,
     to,
     subject,
     html,
@@ -70,14 +70,14 @@ function baseTemplate(title: string, body: string): string {
   return `
   <div style="max-width:600px;margin:0 auto;background:#0a0a0a;border:1px solid #1a1a1a;font-family:Arial,sans-serif">
     <div style="padding:32px 40px;border-bottom:1px solid #1a1a1a;text-align:center">
-      <h1 style="margin:0;font-size:24px;letter-spacing:4px;color:#fff;font-weight:900">BLVCK</h1>
+      <h1 style="margin:0;font-size:24px;letter-spacing:4px;color:#fff;font-weight:900">BLVCK CORE</h1>
     </div>
     <div style="padding:32px 40px">
       <h2 style="margin:0 0 16px;font-size:16px;letter-spacing:2px;color:#fff;text-transform:uppercase">${title}</h2>
       ${body}
     </div>
     <div style="padding:20px 40px;border-top:1px solid #1a1a1a;text-align:center;font-size:11px;color:#555;letter-spacing:1px">
-      BLVCK &mdash; ALL RIGHTS RESERVED
+      BLVCK CORE &mdash; ALL RIGHTS RESERVED
     </div>
   </div>`;
 }
@@ -175,10 +175,10 @@ export function buildStatusUpdateHtml(
 
 export function buildWelcomeHtml(customerName: string): string {
   return baseTemplate(
-    "Welcome to BLVCK",
+    "Welcome to BLVCK CORE",
     `
     <p style="color:#aaa;font-size:13px;line-height:1.6">Dear ${customerName},</p>
-    <p style="color:#aaa;font-size:13px;line-height:1.6">Welcome to the void. You are now part of the BLVCK collective — a community that values precision, minimalism, and absolute matte black craftsmanship.</p>
+    <p style="color:#aaa;font-size:13px;line-height:1.6">Welcome to the void. You are now part of the BLVCK CORE collective — a community that values precision, minimalism, and absolute matte black craftsmanship.</p>
     <div style="background:#111;padding:24px;margin:24px 0;border:1px solid #222;text-align:center">
       <p style="margin:0 0 8px;color:#888;font-size:11px;text-transform:uppercase;letter-spacing:1px">Your account is ready</p>
       <p style="margin:0;color:#fff;font-size:13px;letter-spacing:2px">START EXPLORING OUR DROPS</p>
@@ -199,7 +199,7 @@ export function buildPasswordChangedHtml(customerName: string): string {
     "Password Changed Successfully",
     `
     <p style="color:#aaa;font-size:13px;line-height:1.6">Dear ${customerName},</p>
-    <p style="color:#aaa;font-size:13px;line-height:1.6">Your BLVCK account password has been changed successfully.</p>
+    <p style="color:#aaa;font-size:13px;line-height:1.6">Your BLVCK CORE account password has been changed successfully.</p>
     <div style="background:#111;padding:24px;margin:24px 0;border:1px solid #222;text-align:center">
       <div style="width:48px;height:48px;margin:0 auto 12px;border:1px solid #333;display:flex;align-items:center;justify-content:center">
         <span style="color:#fff;font-size:20px;">✓</span>
@@ -207,7 +207,7 @@ export function buildPasswordChangedHtml(customerName: string): string {
       <p style="margin:0;color:#fff;font-size:13px;letter-spacing:1px">PASSWORD UPDATED</p>
     </div>
     <p style="color:#aaa;font-size:13px;line-height:1.6">If you made this change, no further action is needed. If you did not request this change, please contact our support team immediately.</p>
-    <p style="color:#666;font-size:12px;line-height:1.6;margin-top:24px">Stay secure,<br/>The BLVCK Team</p>
+    <p style="color:#666;font-size:12px;line-height:1.6;margin-top:24px">Stay secure,<br/>The BLVCK CORE Team</p>
     `
   );
 }
@@ -217,7 +217,7 @@ export function buildPasswordResetHtml(resetLink: string, customerName: string):
     "Reset Your Password",
     `
     <p style="color:#aaa;font-size:13px;line-height:1.6">Dear ${customerName},</p>
-    <p style="color:#aaa;font-size:13px;line-height:1.6">We received a request to reset the password for your BLVCK account. Click the button below to choose a new password.</p>
+    <p style="color:#aaa;font-size:13px;line-height:1.6">We received a request to reset the password for your BLVCK CORE account. Click the button below to choose a new password.</p>
     
     <div style="text-align:center;margin:32px 0;">
       <a href="${resetLink}" style="display:inline-block;padding:12px 32px;background:#fff;color:#000;text-decoration:none;font-size:11px;font-weight:bold;letter-spacing:2px;text-transform:uppercase;transition:all 0.2s ease;">

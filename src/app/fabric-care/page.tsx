@@ -5,8 +5,8 @@ import { Droplets, Sun, Thermometer, WashingMachine, Wind, ShieldCheck, AlertTri
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Fabric & Care | BLVCK",
-  description: "BLVCK fabric guide and care instructions — learn about our carbon-dense matte black materials and how to maintain them.",
+  title: "Fabric & Care | BLVCK CORE",
+  description: "BLVCK CORE fabric guide and care instructions — learn about our carbon-dense matte black materials and how to maintain them.",
 };
 
 const fabrics = [
@@ -27,7 +27,7 @@ const fabrics = [
   {
     name: "TACTIL NYLON WOVEN",
     tag: "TECH",
-    desc: "A lightweight, water-repellent woven nylon with a matte calendered finish. Used in our outerwear and technical pieces. Wind-resistant, quick-drying, and packable without compromising the BLVCK aesthetic.",
+    desc: "A lightweight, water-repellent woven nylon with a matte calendered finish. Used in our outerwear and technical pieces. Wind-resistant, quick-drying, and packable without compromising the BLVCK CORE aesthetic.",
     properties: ["Water repellent", "Wind resistant", "Quick drying", "Ultra lightweight"],
     icon: ShieldCheck,
   },
@@ -86,7 +86,7 @@ export default function FabricCarePage() {
         {/* Hero */}
         <section className="mx-auto max-w-7xl px-4 pt-24 pb-12 sm:px-6 lg:px-8 border-b border-white/10">
           <span className="font-display text-xs text-white/45 tracking-widest uppercase">
-            BLVCK LABS CORP
+            BLVCK CORE LABS CORP
           </span>
           <div className="flex items-center gap-4 mt-2">
             <Wind className="h-8 w-8 text-white/30" />
@@ -95,7 +95,7 @@ export default function FabricCarePage() {
             </h1>
           </div>
           <p className="text-white/50 text-sm mt-4 max-w-2xl leading-relaxed">
-            Every BLVCK textile is engineered for longevity. Follow our care protocols to preserve the
+            Every BLVCK CORE textile is engineered for longevity. Follow our care protocols to preserve the
             absolute matte black finish and structural integrity of your garments.
           </p>
         </section>
@@ -220,7 +220,7 @@ export default function FabricCarePage() {
           <div className="mt-8 border border-white/5 bg-card-dark p-6">
             <p className="text-xs text-white/40 leading-relaxed">
               <strong className="text-white/70">GUARANTEE:</strong> When cared for according to these guidelines,
-              your BLVCK garment will retain its absolute matte black finish and structural integrity for over
+              your BLVCK CORE garment will retain its absolute matte black finish and structural integrity for over
               100 wash cycles. Each piece is tested in our lab before release.
             </p>
           </div>

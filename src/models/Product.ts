@@ -40,7 +40,7 @@ const ProductSchema = new mongoose.Schema<IProduct>({
   images: [{ type: String }],
   imageFileIds: [{ type: String }],
   specs: {
-    brand: { type: String, default: "PREMIUM BLVCK LABELS" },
+    brand: { type: String, default: "PREMIUM BLVCK CORE LABELS" },
     type: { type: String, required: true },
     sleeve: { type: String, required: true },
     fit: { type: String, required: true },

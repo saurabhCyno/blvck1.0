@@ -4,8 +4,8 @@ import CartDrawer from "@/components/CartDrawer";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Terms of Service | BLVCK",
-  description: "BLVCK terms of service — our policies on orders, payments, no refunds, and no returns.",
+  title: "Terms of Service | BLVCK CORE",
+  description: "BLVCK CORE terms of service — our policies on orders, payments, no refunds, and no returns.",
 };
 
 export default function TermsPage() {
@@ -17,7 +17,7 @@ export default function TermsPage() {
       <main className="bg-black text-white flex-1 font-body">
         <section className="mx-auto max-w-4xl px-4 pt-24 pb-12 sm:px-6 lg:px-8 border-b border-white/10">
           <span className="font-display text-xs text-white/45 tracking-widest uppercase">
-            BLVCK LABS CORP
+            BLVCK CORE LABS CORP
           </span>
           <h1 className="font-display text-4xl sm:text-5xl font-black tracking-widest-luxury text-white mt-2">
             TERMS OF SERVICE
@@ -31,7 +31,7 @@ export default function TermsPage() {
             <div className="space-y-3">
               <h2 className="font-display text-lg tracking-widest text-white uppercase">1. ACCEPTANCE OF TERMS</h2>
               <p>
-                By accessing or purchasing from BLVCK, you agree to be bound by these Terms of Service. If you do not
+                By accessing or purchasing from BLVCK CORE, you agree to be bound by these Terms of Service. If you do not
                 agree with any part of these terms, you should not use our website or place an order.
               </p>
             </div>
@@ -58,7 +58,7 @@ export default function TermsPage() {
                   FINAL SALE POLICY
                 </p>
                 <p className="text-white/80">
-                  All sales made through BLVCK are <strong>final</strong>. We operate a strict <strong>no refunds, no returns, and no exchanges</strong> policy.
+                  All sales made through BLVCK CORE are <strong>final</strong>. We operate a strict <strong>no refunds, no returns, and no exchanges</strong> policy.
                 </p>
                 <p className="text-white/80">
                   By placing an order, you acknowledge and agree that:
@@ -90,7 +90,7 @@ export default function TermsPage() {
             <div className="space-y-3">
               <h2 className="font-display text-lg tracking-widest text-white uppercase">5. SHIPPING & DELIVERY</h2>
               <p>
-                We ship to addresses within India. Delivery times are estimates and not guaranteed. BLVCK is not
+                We ship to addresses within India. Delivery times are estimates and not guaranteed. BLVCK CORE is not
                 responsible for delays caused by shipping carriers, customs, or unforeseen circumstances. Risk of loss
                 and title for items purchased pass to you upon delivery.
               </p>
@@ -101,7 +101,7 @@ export default function TermsPage() {
               <h2 className="font-display text-lg tracking-widest text-white uppercase">6. INTELLECTUAL PROPERTY</h2>
               <p>
                 All content on this website — including text, images, logos, designs, and code — is the intellectual
-                property of BLVCK. You may not reproduce, distribute, or use any content without our express written
+                property of BLVCK CORE. You may not reproduce, distribute, or use any content without our express written
                 permission.
               </p>
             </div>
@@ -110,7 +110,7 @@ export default function TermsPage() {
             <div className="space-y-3">
               <h2 className="font-display text-lg tracking-widest text-white uppercase">7. LIMITATION OF LIABILITY</h2>
               <p>
-                BLVCK shall not be liable for any indirect, incidental, or consequential damages arising from your use
+                BLVCK CORE shall not be liable for any indirect, incidental, or consequential damages arising from your use
                 of this website or purchase of our products. Our total liability is limited to the amount paid for the
                 product in question.
               </p>
