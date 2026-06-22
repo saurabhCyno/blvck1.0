@@ -92,6 +92,7 @@ export async function getProducts(filters: {
   search?: string;
   minPrice?: string;
   maxPrice?: string;
+  sort?: string;
   page?: number;
   limit?: number;
 } = {}) {
@@ -136,9 +137,14 @@ export async function getProducts(filters: {
     }
   }
 
+  let sortQuery: any = { createdAt: -1 };
+  if (filters.sort === "price_asc") sortQuery = { sellingPrice: 1 };
+  else if (filters.sort === "price_desc") sortQuery = { sellingPrice: -1 };
+  else if (filters.sort === "newest") sortQuery = { createdAt: -1 };
+
   const items = await Product.find(query)
     .populate("category")
-    .sort({ createdAt: -1 })
+    .sort(sortQuery)
     .skip(skip)
     .limit(limit);
 

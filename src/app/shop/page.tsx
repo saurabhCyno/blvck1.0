@@ -14,6 +14,7 @@ interface ShopPageProps {
     search?: string;
     minPrice?: string;
     maxPrice?: string;
+    sort?: string;
   }>;
 }
 
@@ -28,6 +29,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
   const currentSearch = params.search || "";
   const currentMinPrice = params.minPrice || "499";
   const currentMaxPrice = params.maxPrice || "4999";
+  const currentSort = params.sort || "newest";
 
   // Query database with filters
   const { products, totalPages } = await getProducts({
@@ -37,6 +39,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
     search: currentSearch,
     minPrice: currentMinPrice !== "499" ? currentMinPrice : undefined,
     maxPrice: currentMaxPrice !== "4999" ? currentMaxPrice : undefined,
+    sort: currentSort,
     page: currentPage,
     limit: 9,
   });
@@ -69,6 +72,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
             currentSearch={currentSearch}
             currentMinPrice={currentMinPrice}
             currentMaxPrice={currentMaxPrice}
+            currentSort={currentSort}
           />
         </Suspense>
       </main>

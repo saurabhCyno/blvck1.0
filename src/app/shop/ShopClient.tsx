@@ -16,6 +16,7 @@ interface ShopClientProps {
   currentSearch?: string;
   currentMinPrice?: string;
   currentMaxPrice?: string;
+  currentSort?: string;
 }
 
 export default function ShopClient({
@@ -29,6 +30,7 @@ export default function ShopClient({
   currentSearch = "",
   currentMinPrice = "499",
   currentMaxPrice = "4999",
+  currentSort = "newest",
 }: ShopClientProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -71,6 +73,12 @@ export default function ShopClient({
 
   const isPriceDefault = currentMinPrice === "499" && currentMaxPrice === "4999";
 
+  const sortOptions = [
+    { value: "newest", label: "NEWEST FIRST" },
+    { value: "price_asc", label: "PRICE: LOW TO HIGH" },
+    { value: "price_desc", label: "PRICE: HIGH TO LOW" },
+  ];
+
   const sizes: ("S" | "M" | "L" | "XL" | "XXL")[] = ["S", "M", "L", "XL", "XXL"];
   const genders = ["Men", "Women", "Unisex"];
 
@@ -95,6 +103,18 @@ export default function ShopClient({
             <Filter className="h-4 w-4" />
             <span>FILTERS</span>
           </button>
+
+          <select
+            value={currentSort}
+            onChange={(e) => updateFilter("sort", e.target.value)}
+            className="bg-transparent text-white/60 hover:text-white text-xs font-display tracking-widest border border-white/10 px-3 py-2 outline-none focus:border-white/30 transition-colors uppercase cursor-pointer appearance-none"
+          >
+            {sortOptions.map((opt) => (
+              <option key={opt.value} value={opt.value} className="bg-black text-white">
+                {opt.label}
+              </option>
+            ))}
+          </select>
 
           {(currentGender || currentCategory || currentSize || currentSearch || !isPriceDefault) && (
             <button
