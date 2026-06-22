@@ -173,6 +173,45 @@ export function buildStatusUpdateHtml(
   );
 }
 
+export function buildWelcomeHtml(customerName: string): string {
+  return baseTemplate(
+    "Welcome to BLVCK",
+    `
+    <p style="color:#aaa;font-size:13px;line-height:1.6">Dear ${customerName},</p>
+    <p style="color:#aaa;font-size:13px;line-height:1.6">Welcome to the void. You are now part of the BLVCK collective — a community that values precision, minimalism, and absolute matte black craftsmanship.</p>
+    <div style="background:#111;padding:24px;margin:24px 0;border:1px solid #222;text-align:center">
+      <p style="margin:0 0 8px;color:#888;font-size:11px;text-transform:uppercase;letter-spacing:1px">Your account is ready</p>
+      <p style="margin:0;color:#fff;font-size:13px;letter-spacing:2px">START EXPLORING OUR DROPS</p>
+    </div>
+    <p style="color:#aaa;font-size:13px;line-height:1.6">Browse our latest collection of carbon-dense matte black apparel, engineered for those who exist outside the noise.</p>
+    <div style="text-align:center;margin:32px 0;">
+      <a href="${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/shop" style="display:inline-block;padding:12px 32px;background:#fff;color:#000;text-decoration:none;font-size:11px;font-weight:bold;letter-spacing:2px;text-transform:uppercase;">
+        Shop Now
+      </a>
+    </div>
+    <p style="color:#666;font-size:12px;line-height:1.6">If you have any questions, reach out through our contact page or reply to this email.</p>
+    `
+  );
+}
+
+export function buildPasswordChangedHtml(customerName: string): string {
+  return baseTemplate(
+    "Password Changed Successfully",
+    `
+    <p style="color:#aaa;font-size:13px;line-height:1.6">Dear ${customerName},</p>
+    <p style="color:#aaa;font-size:13px;line-height:1.6">Your BLVCK account password has been changed successfully.</p>
+    <div style="background:#111;padding:24px;margin:24px 0;border:1px solid #222;text-align:center">
+      <div style="width:48px;height:48px;margin:0 auto 12px;border:1px solid #333;display:flex;align-items:center;justify-content:center">
+        <span style="color:#fff;font-size:20px;">✓</span>
+      </div>
+      <p style="margin:0;color:#fff;font-size:13px;letter-spacing:1px">PASSWORD UPDATED</p>
+    </div>
+    <p style="color:#aaa;font-size:13px;line-height:1.6">If you made this change, no further action is needed. If you did not request this change, please contact our support team immediately.</p>
+    <p style="color:#666;font-size:12px;line-height:1.6;margin-top:24px">Stay secure,<br/>The BLVCK Team</p>
+    `
+  );
+}
+
 export function buildPasswordResetHtml(resetLink: string, customerName: string): string {
   return baseTemplate(
     "Reset Your Password",

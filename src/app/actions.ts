@@ -21,6 +21,8 @@ import {
   buildAdminNotificationHtml,
   buildStatusUpdateHtml,
   buildPasswordResetHtml,
+  buildWelcomeHtml,
+  buildPasswordChangedHtml,
   ADMIN_EMAIL,
 } from "@/lib/mail";
 
@@ -201,6 +203,16 @@ export async function userSignup(formData: {
       path: "/",
     });
 
+    try {
+      await sendEmail({
+        to: user.email,
+        subject: "Welcome to BLVCK",
+        html: buildWelcomeHtml(user.name),
+      });
+    } catch (emailErr) {
+      console.warn("Failed to send welcome email:", emailErr);
+    }
+
     return { success: true, user: { id: user._id.toString(), name: user.name, email: user.email } };
   } catch (error: any) {
     return { success: false, error: error.message || "Failed to create account." };
@@ -328,6 +340,16 @@ export async function resetPassword(token: string, password: string): Promise<{ 
     user.resetPasswordToken = undefined;
     user.resetPasswordExpires = undefined;
     await user.save();
+
+    try {
+      await sendEmail({
+        to: user.email,
+        subject: "Password Changed - BLVCK",
+        html: buildPasswordChangedHtml(user.name),
+      });
+    } catch (emailErr) {
+      console.warn("Failed to send password changed email:", emailErr);
+    }
 
     return { success: true };
   } catch (error: any) {
