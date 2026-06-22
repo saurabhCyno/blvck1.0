@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCartStore } from "@/store/useCartStore";
-import { ShoppingBag, Menu, X, User } from "lucide-react";
+import { ShoppingBag, Menu, X, User, Search } from "lucide-react";
+import SearchModal from "./SearchModal";
 
 interface Socials {
   instagram?: string;
@@ -18,6 +19,7 @@ export default function HeaderContent({ socials = {} }: { socials?: Socials }) {
   const items = useCartStore((state) => state.items);
   const [mounted, setMounted] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -81,6 +83,14 @@ export default function HeaderContent({ socials = {} }: { socials?: Socials }) {
 
           {/* Right Action Icons */}
           <div className="flex items-center space-x-6">
+            <button
+              onClick={() => setSearchOpen(true)}
+              className="text-white/45 hover:text-white transition-colors"
+              aria-label="Open search"
+            >
+              <Search className="h-5 w-5" />
+            </button>
+
             <Link
               href="/account"
               className="text-white/45 hover:text-white transition-colors"
@@ -136,6 +146,9 @@ export default function HeaderContent({ socials = {} }: { socials?: Socials }) {
           </div>
         </div>
       </div>
+
+      {/* Search Modal */}
+      <SearchModal open={searchOpen} onClose={() => setSearchOpen(false)} />
 
       {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (

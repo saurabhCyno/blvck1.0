@@ -13,6 +13,7 @@ interface ShopClientProps {
   currentGender?: string;
   currentCategory?: string;
   currentSize?: string;
+  currentSearch?: string;
 }
 
 export default function ShopClient({
@@ -23,6 +24,7 @@ export default function ShopClient({
   currentGender = "",
   currentCategory = "",
   currentSize = "",
+  currentSearch = "",
 }: ShopClientProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -45,7 +47,7 @@ export default function ShopClient({
   };
 
   const clearFilters = () => {
-    router.push("/shop");
+    router.push(currentSearch ? "/shop" : "/shop");
   };
 
   const sizes: ("S" | "M" | "L" | "XL" | "XXL")[] = ["S", "M", "L", "XL", "XXL"];
@@ -57,10 +59,10 @@ export default function ShopClient({
       <div className="border-b border-white/10 pb-8 mb-8 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
         <div className="space-y-1">
           <span className="font-display text-xs text-white/45 tracking-widest">
-            COUTURE DIVISION
+            {currentSearch ? "SEARCH RESULTS" : "COUTURE DIVISION"}
           </span>
           <h1 className="font-display text-4xl font-black tracking-widest-luxury text-white">
-            THE CATALOG
+            {currentSearch ? `"${currentSearch.toUpperCase()}"` : "THE CATALOG"}
           </h1>
         </div>
 
@@ -73,7 +75,7 @@ export default function ShopClient({
             <span>FILTERS</span>
           </button>
 
-          {(currentGender || currentCategory || currentSize) && (
+          {(currentGender || currentCategory || currentSize || currentSearch) && (
             <button
               onClick={clearFilters}
               className="flex items-center space-x-2 text-white/45 hover:text-white text-xs font-display tracking-widest transition-colors uppercase"
@@ -88,6 +90,40 @@ export default function ShopClient({
       <div className="flex gap-10">
         {/* Desktop Left Fixed Filters Panel */}
         <aside className="hidden md:block w-64 flex-shrink-0 space-y-10">
+          {/* Search */}
+          <div className="space-y-4">
+            <h3 className="font-display text-xs text-white tracking-widest font-black uppercase">
+              SEARCH
+            </h3>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                const form = e.currentTarget;
+                const input = form.elements.namedItem("search") as HTMLInputElement;
+                updateFilter("search", input.value.trim());
+              }}
+            >
+              <div className="flex border border-white/10 focus-within:border-white/30 transition-colors">
+                <input
+                  name="search"
+                  type="text"
+                  defaultValue={currentSearch}
+                  placeholder="TYPE HERE..."
+                  className="w-full bg-transparent text-white font-display text-xs tracking-widest px-3 py-2.5 outline-none placeholder:text-white/20"
+                />
+                <button
+                  type="submit"
+                  className="px-3 text-white/30 hover:text-white transition-colors flex items-center"
+                  aria-label="Search"
+                >
+                  <svg className="h-4 w-4 fill-current" viewBox="0 0 24 24">
+                    <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+                  </svg>
+                </button>
+              </div>
+            </form>
+          </div>
+
           {/* Categories */}
           <div className="space-y-4">
             <h3 className="font-display text-xs text-white tracking-widest font-black uppercase">
@@ -238,6 +274,41 @@ export default function ShopClient({
               >
                 <X className="h-6 w-6" />
               </button>
+            </div>
+
+            {/* Search */}
+            <div className="space-y-3">
+              <h3 className="font-display text-xs text-white/45 tracking-widest font-black uppercase">
+                SEARCH
+              </h3>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const form = e.currentTarget;
+                  const input = form.elements.namedItem("search-mobile") as HTMLInputElement;
+                  updateFilter("search", input.value.trim());
+                  setMobileFiltersOpen(false);
+                }}
+              >
+                <div className="flex border border-white/10 focus-within:border-white/30 transition-colors">
+                  <input
+                    name="search-mobile"
+                    type="text"
+                    defaultValue={currentSearch}
+                    placeholder="TYPE HERE..."
+                    className="w-full bg-transparent text-white font-display text-xs tracking-widest px-3 py-2.5 outline-none placeholder:text-white/20"
+                  />
+                  <button
+                    type="submit"
+                    className="px-3 text-white/30 hover:text-white transition-colors flex items-center"
+                    aria-label="Search"
+                  >
+                    <svg className="h-4 w-4 fill-current" viewBox="0 0 24 24">
+                      <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+                    </svg>
+                  </button>
+                </div>
+              </form>
             </div>
 
             {/* Categories */}

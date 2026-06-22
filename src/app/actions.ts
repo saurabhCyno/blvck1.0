@@ -110,7 +110,21 @@ export async function getProducts(filters: {
     query["sizes"] = { $elemMatch: { size: filters.size, stock: { $gt: 0 } } };
   }
   if (filters.search) {
-    query.title = { $regex: filters.search, $options: "i" };
+    const regex = { $regex: filters.search, $options: "i" };
+    query.$or = [
+      { title: regex },
+      { description: regex },
+      { "specs.type": regex },
+      { "specs.brand": regex },
+      { "specs.fabric": regex },
+      { "specs.fit": regex },
+      { "specs.pattern": regex },
+      { "specs.sleeve": regex },
+    ];
+    const matchingCategories = await Category.find({ name: regex }).select("_id");
+    if (matchingCategories.length > 0) {
+      query.$or.push({ category: { $in: matchingCategories.map((c: any) => c._id) } });
+    }
   }
 
   const items = await Product.find(query)

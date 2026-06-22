@@ -11,6 +11,7 @@ interface ShopPageProps {
     gender?: string;
     size?: string;
     page?: string;
+    search?: string;
   }>;
 }
 
@@ -22,12 +23,14 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
   const currentCategory = params.category || "";
   const currentGender = params.gender || "";
   const currentSize = params.size || "";
+  const currentSearch = params.search || "";
 
   // Query database with filters
   const { products, totalPages } = await getProducts({
     category: currentCategory,
     gender: currentGender,
     size: currentSize,
+    search: currentSearch,
     page: currentPage,
     limit: 9,
   });
@@ -57,6 +60,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
             currentGender={currentGender}
             currentCategory={currentCategory}
             currentSize={currentSize}
+            currentSearch={currentSearch}
           />
         </Suspense>
       </main>
