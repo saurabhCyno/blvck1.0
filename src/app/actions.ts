@@ -90,6 +90,8 @@ export async function getProducts(filters: {
   gender?: string;
   size?: string;
   search?: string;
+  minPrice?: string;
+  maxPrice?: string;
   page?: number;
   limit?: number;
 } = {}) {
@@ -109,6 +111,13 @@ export async function getProducts(filters: {
   if (filters.size) {
     query["sizes"] = { $elemMatch: { size: filters.size, stock: { $gt: 0 } } };
   }
+  if (filters.minPrice || filters.maxPrice) {
+    const priceQuery: any = {};
+    if (filters.minPrice) priceQuery.$gte = Number(filters.minPrice);
+    if (filters.maxPrice) priceQuery.$lte = Number(filters.maxPrice);
+    query.sellingPrice = priceQuery;
+  }
+
   if (filters.search) {
     const regex = { $regex: filters.search, $options: "i" };
     query.$or = [

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import ProductCard from "@/components/ProductCard";
 import { Filter, X, ChevronRight, RotateCcw } from "lucide-react";
@@ -14,6 +14,8 @@ interface ShopClientProps {
   currentCategory?: string;
   currentSize?: string;
   currentSearch?: string;
+  currentMinPrice?: string;
+  currentMaxPrice?: string;
 }
 
 export default function ShopClient({
@@ -25,10 +27,27 @@ export default function ShopClient({
   currentCategory = "",
   currentSize = "",
   currentSearch = "",
+  currentMinPrice = "499",
+  currentMaxPrice = "4999",
 }: ShopClientProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const [rangeMin, setRangeMin] = useState(currentMinPrice);
+  const [rangeMax, setRangeMax] = useState(currentMaxPrice);
+
+  useEffect(() => {
+    setRangeMin(currentMinPrice);
+    setRangeMax(currentMaxPrice);
+  }, [currentMinPrice, currentMaxPrice]);
+
+  const applyPriceFilter = () => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", "1");
+    params.set("minPrice", rangeMin);
+    params.set("maxPrice", rangeMax);
+    router.push(`/shop?${params.toString()}`);
+  };
 
   // Helper to update search params
   const updateFilter = (key: string, value: string) => {
@@ -47,8 +66,10 @@ export default function ShopClient({
   };
 
   const clearFilters = () => {
-    router.push(currentSearch ? "/shop" : "/shop");
+    router.push("/shop");
   };
+
+  const isPriceDefault = currentMinPrice === "499" && currentMaxPrice === "4999";
 
   const sizes: ("S" | "M" | "L" | "XL" | "XXL")[] = ["S", "M", "L", "XL", "XXL"];
   const genders = ["Men", "Women", "Unisex"];
@@ -75,7 +96,7 @@ export default function ShopClient({
             <span>FILTERS</span>
           </button>
 
-          {(currentGender || currentCategory || currentSize || currentSearch) && (
+          {(currentGender || currentCategory || currentSize || currentSearch || !isPriceDefault) && (
             <button
               onClick={clearFilters}
               className="flex items-center space-x-2 text-white/45 hover:text-white text-xs font-display tracking-widest transition-colors uppercase"
@@ -122,6 +143,49 @@ export default function ShopClient({
                 </button>
               </div>
             </form>
+          </div>
+
+          {/* Price Range */}
+          <div className="space-y-4">
+            <h3 className="font-display text-xs text-white tracking-widest font-black uppercase">
+              PRICE RANGE
+            </h3>
+            <div className="pt-2">
+              <div className="relative h-6">
+                <div className="absolute top-1/2 -translate-y-1/2 left-0 right-0 h-0.5 bg-white/10 rounded" />
+                <div
+                  className="absolute top-1/2 -translate-y-1/2 h-0.5 bg-white rounded"
+                  style={{
+                    left: `${((Number(rangeMin) - 499) / (4999 - 499)) * 100}%`,
+                    right: `${100 - ((Number(rangeMax) - 499) / (4999 - 499)) * 100}%`,
+                  }}
+                />
+                <input
+                  type="range"
+                  min={499}
+                  max={4999}
+                  value={rangeMin}
+                  onChange={(e) => setRangeMin(String(Math.min(Number(e.target.value), Number(rangeMax) - 100)))}
+                  onMouseUp={applyPriceFilter}
+                  onTouchEnd={applyPriceFilter}
+                  className="absolute inset-0 w-full appearance-none bg-transparent pointer-events-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:cursor-pointer [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-white [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-track]:appearance-none [&::-moz-range-track]:bg-transparent"
+                />
+                <input
+                  type="range"
+                  min={499}
+                  max={4999}
+                  value={rangeMax}
+                  onChange={(e) => setRangeMax(String(Math.max(Number(e.target.value), Number(rangeMin) + 100)))}
+                  onMouseUp={applyPriceFilter}
+                  onTouchEnd={applyPriceFilter}
+                  className="absolute inset-0 w-full appearance-none bg-transparent pointer-events-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:cursor-pointer [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-white [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-track]:appearance-none [&::-moz-range-track]:bg-transparent"
+                />
+              </div>
+              <div className="flex justify-between mt-3 text-xs font-display text-white/50 tracking-wider">
+                <span>₹{rangeMin}</span>
+                <span>₹{rangeMax}</span>
+              </div>
+            </div>
           </div>
 
           {/* Categories */}
@@ -309,6 +373,49 @@ export default function ShopClient({
                   </button>
                 </div>
               </form>
+            </div>
+
+            {/* Price Range */}
+            <div className="space-y-3">
+              <h3 className="font-display text-xs text-white/45 tracking-widest font-black uppercase">
+                PRICE RANGE
+              </h3>
+              <div className="pt-2">
+                <div className="relative h-6">
+                  <div className="absolute top-1/2 -translate-y-1/2 left-0 right-0 h-0.5 bg-white/10 rounded" />
+                  <div
+                    className="absolute top-1/2 -translate-y-1/2 h-0.5 bg-white rounded"
+                    style={{
+                      left: `${((Number(rangeMin) - 499) / (4999 - 499)) * 100}%`,
+                      right: `${100 - ((Number(rangeMax) - 499) / (4999 - 499)) * 100}%`,
+                    }}
+                  />
+                  <input
+                    type="range"
+                    min={499}
+                    max={4999}
+                    value={rangeMin}
+                    onChange={(e) => setRangeMin(String(Math.min(Number(e.target.value), Number(rangeMax) - 100)))}
+                    onMouseUp={applyPriceFilter}
+                    onTouchEnd={applyPriceFilter}
+                    className="absolute inset-0 w-full appearance-none bg-transparent pointer-events-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:cursor-pointer [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-white [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-track]:appearance-none [&::-moz-range-track]:bg-transparent"
+                  />
+                  <input
+                    type="range"
+                    min={499}
+                    max={4999}
+                    value={rangeMax}
+                    onChange={(e) => setRangeMax(String(Math.max(Number(e.target.value), Number(rangeMin) + 100)))}
+                    onMouseUp={applyPriceFilter}
+                    onTouchEnd={applyPriceFilter}
+                    className="absolute inset-0 w-full appearance-none bg-transparent pointer-events-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:cursor-pointer [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-white [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-track]:appearance-none [&::-moz-range-track]:bg-transparent"
+                  />
+                </div>
+                <div className="flex justify-between mt-3 text-xs font-display text-white/50 tracking-wider">
+                  <span>₹{rangeMin}</span>
+                  <span>₹{rangeMax}</span>
+                </div>
+              </div>
             </div>
 
             {/* Categories */}

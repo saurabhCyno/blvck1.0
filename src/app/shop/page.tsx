@@ -12,6 +12,8 @@ interface ShopPageProps {
     size?: string;
     page?: string;
     search?: string;
+    minPrice?: string;
+    maxPrice?: string;
   }>;
 }
 
@@ -24,6 +26,8 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
   const currentGender = params.gender || "";
   const currentSize = params.size || "";
   const currentSearch = params.search || "";
+  const currentMinPrice = params.minPrice || "499";
+  const currentMaxPrice = params.maxPrice || "4999";
 
   // Query database with filters
   const { products, totalPages } = await getProducts({
@@ -31,6 +35,8 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
     gender: currentGender,
     size: currentSize,
     search: currentSearch,
+    minPrice: currentMinPrice !== "499" ? currentMinPrice : undefined,
+    maxPrice: currentMaxPrice !== "4999" ? currentMaxPrice : undefined,
     page: currentPage,
     limit: 9,
   });
@@ -61,6 +67,8 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
             currentCategory={currentCategory}
             currentSize={currentSize}
             currentSearch={currentSearch}
+            currentMinPrice={currentMinPrice}
+            currentMaxPrice={currentMaxPrice}
           />
         </Suspense>
       </main>
