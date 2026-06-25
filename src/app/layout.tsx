@@ -3,6 +3,7 @@ import { Bebas_Neue } from "next/font/google";
 import { Suspense } from "react";
 import "./globals.css";
 import NavigationProgress from "@/components/NavigationProgress";
+import WhatsAppButton from "@/components/WhatsAppButton";
 
 const bebasNeue = Bebas_Neue({
   weight: "400",
@@ -36,6 +37,7 @@ export default function RootLayout({
           <NavigationProgress />
         </Suspense>
         {children}
+        <WhatsAppButton />
       </body>
     </html>
   );

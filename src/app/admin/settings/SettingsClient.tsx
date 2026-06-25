@@ -37,8 +37,8 @@ export default function SettingsClient({
   // Socials CMS State
   const [socialsState, setSocialsState] = useState({
     instagram: socialsCMS?.instagram || "",
-    twitter: socialsCMS?.twitter || "",
-    youtube: socialsCMS?.youtube || "",
+    facebook: socialsCMS?.facebook || "",
+    whatsapp: socialsCMS?.whatsapp || "",
   });
 
   // Contacts CMS State
@@ -215,30 +215,30 @@ export default function SettingsClient({
               />
             </div>
 
-            {/* Twitter */}
+            {/* Facebook */}
             <div className="space-y-1">
-              <label htmlFor="cms-twitter" className="block text-xs font-display tracking-widest text-white/50 uppercase">
-                TWITTER (X) LINK
+              <label htmlFor="cms-facebook" className="block text-xs font-display tracking-widest text-white/50 uppercase">
+                FACEBOOK LINK
               </label>
               <input
-                id="cms-twitter"
+                id="cms-facebook"
                 type="url"
-                value={socialsState.twitter}
-                onChange={(e) => setSocialsState({ ...socialsState, twitter: e.target.value })}
+                value={socialsState.facebook}
+                onChange={(e) => setSocialsState({ ...socialsState, facebook: e.target.value })}
                 className="w-full bg-card-dark border border-white/10 px-4 py-3 text-xs text-white focus:outline-hidden"
               />
             </div>
 
-            {/* Youtube */}
+            {/* WhatsApp */}
             <div className="space-y-1">
-              <label htmlFor="cms-youtube" className="block text-xs font-display tracking-widest text-white/50 uppercase">
-                YOUTUBE LINK
+              <label htmlFor="cms-whatsapp" className="block text-xs font-display tracking-widest text-white/50 uppercase">
+                WHATSAPP LINK
               </label>
               <input
-                id="cms-youtube"
+                id="cms-whatsapp"
                 type="url"
-                value={socialsState.youtube}
-                onChange={(e) => setSocialsState({ ...socialsState, youtube: e.target.value })}
+                value={socialsState.whatsapp}
+                onChange={(e) => setSocialsState({ ...socialsState, whatsapp: e.target.value })}
                 className="w-full bg-card-dark border border-white/10 px-4 py-3 text-xs text-white focus:outline-hidden"
               />
             </div>
@@ -273,7 +273,7 @@ export default function SettingsClient({
               <input
                 id="cms-phone"
                 type="text"
-                placeholder="Include country code, e.g. +919876543210"
+                placeholder="Include country code, e.g. +917300511290"
                 value={contactsState.phone}
                 onChange={(e) => setContactsState({ ...contactsState, phone: e.target.value })}
                 className="w-full bg-card-dark border border-white/10 px-4 py-3 text-xs text-white focus:outline-hidden"

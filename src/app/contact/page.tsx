@@ -17,9 +17,9 @@ export default async function ContactPage() {
   const contactsData = await getSetting("contacts_cms");
 
   // Fallback defaults
-  const phone = contactsData?.phone || "+919876543210";
-  const email = contactsData?.email || "concierge@blvck.com";
-  const address = contactsData?.address || "71 Carbon Square, Sector Dark, New Delhi, India";
+  const phone = contactsData?.phone || "+917300511290";
+  const email = contactsData?.email || "blvck6196@gmail.com";
+  const address = contactsData?.address || "Tyagi Market, Premnagar, Dehradun, India - 248007";
 
   return (
     <>

@@ -1041,20 +1041,8 @@ export async function adminGetStats() {
 export async function seedDatabase() {
   await dbConnect();
 
-  // 1. Check if Category already has items
-  const catCount = await Category.countDocuments();
-  if (catCount > 0) return { success: true, message: "Database already populated." };
-
-  console.log("Seeding Database...");
-
-  // Seed Categories
-  const topsCategory = await Category.create({ name: "Tops" });
-  const bottomsCategory = await Category.create({ name: "Bottoms" });
-  const outerwearCategory = await Category.create({ name: "Outerwear" });
-  const accessoriesCategory = await Category.create({ name: "Accessories" });
-
-  // Seed settings
-  await Setting.create([
+  // Always sync CMS settings (upsert so existing data gets updated)
+  const settingsData = [
     {
       key: "about_cms",
       value: {
@@ -1070,20 +1058,35 @@ export async function seedDatabase() {
     {
       key: "socials_cms",
       value: {
-        instagram: "https://instagram.com/blvck",
-        twitter: "https://twitter.com/blvck",
-        youtube: "https://youtube.com/blvck"
+        instagram: "https://www.instagram.com/blvck_core_official/",
+        facebook: "https://www.facebook.com/people/Blvck-Core-Official/61591257543655/",
+        whatsapp: "https://wa.me/917300511290"
       }
     },
     {
       key: "contacts_cms",
       value: {
-        phone: "+919876543210",
-        email: "concierge@blvck.com",
-        address: "71 Carbon Square, Sector Dark, New Delhi, India"
+        phone: "+917300511290",
+        email: "blvck6196@gmail.com",
+        address: "Tyagi Market, Premnagar, Dehradun, India - 248007"
       }
     }
-  ]);
+  ];
+  for (const s of settingsData) {
+    await Setting.findOneAndUpdate({ key: s.key }, { $set: { value: s.value } }, { upsert: true });
+  }
+
+  // Check if already seeded
+  const catCount = await Category.countDocuments();
+  if (catCount > 0) return { success: true, message: "Settings synced." };
+
+  console.log("Seeding Database...");
+
+  // Seed Categories
+  const topsCategory = await Category.create({ name: "Tops" });
+  const bottomsCategory = await Category.create({ name: "Bottoms" });
+  const outerwearCategory = await Category.create({ name: "Outerwear" });
+  const accessoriesCategory = await Category.create({ name: "Accessories" });
 
   // Seed Blogs
   await Blog.create([

@@ -10,8 +10,8 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const FROM_EMAIL = process.env.SMTP_FROM || process.env.SMTP_USER || "noreply@blvck.com";
-export const ADMIN_EMAIL = process.env.ADMIN_EMAIL || process.env.SMTP_USER || "admin@blvck.com";
+const FROM_EMAIL = process.env.SMTP_FROM || process.env.SMTP_USER || "blvck6196@gmail.com";
+export const ADMIN_EMAIL = process.env.ADMIN_EMAIL || process.env.SMTP_USER || "blvck6196@gmail.com";
 
 export async function sendEmail({
   to,

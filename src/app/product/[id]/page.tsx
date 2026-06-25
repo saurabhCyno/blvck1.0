@@ -48,7 +48,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   // Fetch administrator contacts for WhatsApp queries
   const contactCMS = await getSetting("contacts_cms");
-  const adminPhone = contactCMS?.phone || "+919876543210";
+  const adminPhone = contactCMS?.phone || "+917300511290";
 
   // Fetch approved reviews
   const initialReviews = await getProductReviews(product._id);

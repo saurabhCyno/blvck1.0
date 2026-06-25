@@ -31,27 +31,27 @@ export default async function Footer() {
                   <span className="text-white/10">/</span>
                 </>
               )}
-              {socials?.twitter && (
+              {socials?.facebook && (
                 <>
                   <a
-                    href={socials.twitter}
+                    href={socials.facebook}
                     target="_blank"
                     rel="noreferrer"
                     className="hover:text-white transition-colors"
                   >
-                    TWITTER (X)
+                    FACEBOOK
                   </a>
                   <span className="text-white/10">/</span>
                 </>
               )}
-              {socials?.youtube && (
+              {socials?.whatsapp && (
                 <a
-                  href={socials.youtube}
+                  href={socials.whatsapp}
                   target="_blank"
                   rel="noreferrer"
                   className="hover:text-white transition-colors"
                 >
-                  YOUTUBE
+                  WHATSAPP
                 </a>
               )}
             </div>
