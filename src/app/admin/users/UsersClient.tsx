@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Download, Calendar, ChevronLeft, ChevronRight } from "lucide-react";
+import { Download, Calendar } from "lucide-react";
+import Pagination from "@/components/Pagination";
 
-const PAGE_SIZE = 15;
+const PAGE_SIZE = 10;
 
 interface UsersClientProps {
   initialUsers: any[];
@@ -115,37 +116,11 @@ export default function UsersClient({ initialUsers }: UsersClientProps) {
             </table>
           </div>
 
-          {totalPages > 1 && (
-            <div className="flex items-center justify-center space-x-2 pt-6 border-t border-white/5">
-              <button
-                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                disabled={currentPage === 1}
-                className="h-8 w-8 flex items-center justify-center border border-white/10 text-white/40 hover:text-white hover:border-white/30 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
-              >
-                <ChevronLeft className="h-4 w-4" />
-              </button>
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
-                <button
-                  key={p}
-                  onClick={() => setCurrentPage(p)}
-                  className={`h-8 w-8 text-xs font-display flex items-center justify-center border transition-all ${
-                    currentPage === p
-                      ? "border-white bg-white text-black font-black"
-                      : "border-white/10 text-white/40 hover:border-white/30"
-                  }`}
-                >
-                  {p}
-                </button>
-              ))}
-              <button
-                onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                disabled={currentPage === totalPages}
-                className="h-8 w-8 flex items-center justify-center border border-white/10 text-white/40 hover:text-white hover:border-white/30 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
-              >
-                <ChevronRight className="h-4 w-4" />
-              </button>
-            </div>
-          )}
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
         </>
       )}
     </div>

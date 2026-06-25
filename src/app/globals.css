@@ -63,3 +63,7 @@ body {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }
+
+button, a {
+  cursor: pointer;
+}

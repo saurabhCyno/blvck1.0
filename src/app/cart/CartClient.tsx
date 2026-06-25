@@ -20,6 +20,7 @@ export default function CartClient() {
 
   const [mounted, setMounted] = useState(false);
   const [isCheckingOut, setIsCheckingOut] = useState(false);
+  const [isPlacing, setIsPlacing] = useState(false);
   const [orderSuccess, setOrderSuccess] = useState(false);
   const [createdOrderId, setCreatedOrderId] = useState("");
   const [formError, setFormError] = useState("");
@@ -62,10 +63,13 @@ export default function CartClient() {
     if (!formData.phone.trim() || formData.phone.length < 8) return setFormError("Valid Contact Number is required.");
     if (!formData.address.trim()) return setFormError("Full Shipping Address is required.");
 
+    setIsPlacing(true);
+
     try {
       const orderItems = items.map((i) => ({
         productId: i._id,
         size: i.size,
+        fabric: i.fabric,
         quantity: i.quantity,
         priceAtPurchase: i.price,
       }));
@@ -82,9 +86,11 @@ export default function CartClient() {
         clearCart();
       } else {
         setFormError(response.error || "Failed to process order. Please try again.");
+        setIsPlacing(false);
       }
     } catch {
       setFormError("An unexpected error occurred. Please verify stock counts.");
+      setIsPlacing(false);
     }
   };
 
@@ -193,7 +199,7 @@ export default function CartClient() {
                       </span>
                     </div>
                     <p className="font-body text-xs text-white/45 uppercase tracking-widest">
-                      SIZE: {item.size}
+                      SIZE: {item.size}{item.fabric ? <> &bull; FABRIC: {item.fabric}GSM</> : ""}
                     </p>
                   </div>
 
@@ -366,16 +372,18 @@ export default function CartClient() {
               <div className="grid grid-cols-2 gap-2 pt-2">
                 <button
                   type="button"
+                  disabled={isPlacing}
                   onClick={() => setIsCheckingOut(false)}
-                  className="w-full border border-white/20 text-white font-display text-xs py-4 tracking-widest hover:border-white transition-all uppercase"
+                  className="w-full border border-white/20 text-white font-display text-xs py-4 tracking-widest hover:border-white transition-all uppercase disabled:opacity-30 disabled:cursor-not-allowed"
                 >
                   BACK
                 </button>
                 <button
                   type="submit"
-                  className="w-full bg-white text-black font-display font-black text-xs py-4 tracking-widest hover:bg-white/80 transition-all uppercase"
+                  disabled={isPlacing}
+                  className="w-full bg-white text-black font-display font-black text-xs py-4 tracking-widest hover:bg-white/80 transition-all uppercase disabled:bg-white/50 disabled:cursor-not-allowed"
                 >
-                  PLACE ORDER
+                  {isPlacing ? "PLACING..." : "PLACE ORDER"}
                 </button>
               </div>
             </form>

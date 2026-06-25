@@ -41,7 +41,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
     maxPrice: currentMaxPrice !== "4999" ? currentMaxPrice : undefined,
     sort: currentSort,
     page: currentPage,
-    limit: 9,
+    limit: 12,
   });
 
   const categories = await getCategories();

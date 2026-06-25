@@ -6,6 +6,7 @@ export interface CartItem {
   title: string;
   price: number;
   size: "S" | "M" | "L" | "XL" | "XXL";
+  fabric: number;
   quantity: number;
   image: string;
   maxStock: number;

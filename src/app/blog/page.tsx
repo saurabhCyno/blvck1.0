@@ -14,8 +14,15 @@ export const metadata: Metadata = {
 
 export const revalidate = 0; // Prevent Next.js from caching editorials updates
 
-export default async function BlogListPage() {
-  const posts = await getBlogs();
+interface BlogListPageProps {
+  searchParams: Promise<{ page?: string }>;
+}
+
+export default async function BlogListPage({ searchParams }: BlogListPageProps) {
+  const params = await searchParams;
+  const currentPage = parseInt(params.page || "1", 10);
+
+  const { posts, totalPages } = await getBlogs({ page: currentPage, limit: 12 }) as any;
 
   return (
     <>
@@ -83,6 +90,25 @@ export default async function BlogListPage() {
                       READ ESSAY
                     </span>
                   </div>
+                </Link>
+              ))}
+            </div>
+          )}
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="flex justify-center items-center gap-4 mt-16">
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+                <Link
+                  key={p}
+                  href={`/blog?page=${p}`}
+                  className={`px-6 py-2 text-xs font-display tracking-widest transition-all duration-300 ${
+                    p === currentPage
+                      ? "bg-white text-black"
+                      : "border border-white/20 text-white/60 hover:text-white hover:border-white/50"
+                  }`}
+                >
+                  {String(p).padStart(2, "0")}
                 </Link>
               ))}
             </div>

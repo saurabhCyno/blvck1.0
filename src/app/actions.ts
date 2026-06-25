@@ -190,9 +190,22 @@ export async function getRelatedProducts(categoryId: string, excludeProductId: s
   return JSON.parse(JSON.stringify(items));
 }
 
-export async function getBlogs() {
+export async function getBlogs(options?: { page?: number; limit?: number }) {
   await dbConnect();
-  const items = await Blog.find({}).sort({ createdAt: -1 });
+  const page = options?.page || 1;
+  const limit = options?.limit || 12;
+  const skip = (page - 1) * limit;
+
+  const items = await Blog.find({}).sort({ createdAt: -1 }).skip(skip).limit(limit);
+  const total = await Blog.countDocuments({});
+
+  if (options) {
+    return {
+      posts: JSON.parse(JSON.stringify(items)),
+      totalPages: Math.ceil(total / limit),
+      currentPage: page,
+    };
+  }
   return JSON.parse(JSON.stringify(items));
 }
 
@@ -681,7 +694,7 @@ export async function getSetting(key: string) {
 // --- DATA MUTATIONS (Client Server Actions) ---
 export async function createOrder(formData: {
   customerInfo: { name: string; email: string; phone: string; address: string };
-  items: { productId: string; size: string; quantity: number; priceAtPurchase: number }[];
+  items: { productId: string; size: string; fabric: number; quantity: number; priceAtPurchase: number }[];
   totalAmount: number;
 }) {
   await dbConnect();
@@ -718,6 +731,7 @@ export async function createOrder(formData: {
         return {
           title: p ? p.title : "Product",
           size: item.size,
+          fabric: item.fabric,
           quantity: item.quantity,
           price: item.priceAtPurchase,
         };
@@ -891,7 +905,7 @@ export async function adminUpdateOrderStatus(orderId: string, status: string) {
 
 export async function adminCreateOrder(formData: {
   customerInfo: { name: string; email: string; phone: string; address: string };
-  items: { productId: string; size: string; quantity: number; priceAtPurchase: number }[];
+  items: { productId: string; size: string; fabric: number; quantity: number; priceAtPurchase: number }[];
   totalAmount: number;
   paymentMethod?: string;
 }) {
@@ -914,6 +928,7 @@ export async function adminCreateOrder(formData: {
         return {
           title: p ? p.title : "Product",
           size: item.size,
+          fabric: item.fabric,
           quantity: item.quantity,
           price: item.priceAtPurchase,
         };

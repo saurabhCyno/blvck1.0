@@ -1,19 +1,36 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { adminToggleInquiryStatus, adminDeleteInquiry } from "@/app/actions";
 import { Inbox, Eye, EyeOff, Calendar, User, Phone, Mail, ChevronDown, ChevronUp, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Pagination from "@/components/Pagination";
 
 interface InquiriesClientProps {
   initialInquiries: any[];
 }
+
+const PAGE_SIZE = 10;
 
 export default function InquiriesClient({ initialInquiries }: InquiriesClientProps) {
   const router = useRouter();
   const [inquiries, setInquiries] = useState(initialInquiries);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [filterReadStatus, setFilterReadStatus] = useState<string>("All");
+  const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filterReadStatus]);
+
+  const filteredInquiries = inquiries.filter(
+    (inq) => filterReadStatus === "All" || inq.status === filterReadStatus
+  );
+  const totalPages = Math.ceil(filteredInquiries.length / PAGE_SIZE);
+  const paginatedInquiries = filteredInquiries.slice(
+    (currentPage - 1) * PAGE_SIZE,
+    currentPage * PAGE_SIZE
+  );
 
   const handleDelete = async (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -52,10 +69,6 @@ export default function InquiriesClient({ initialInquiries }: InquiriesClientPro
     setExpandedId(expandedId === id ? null : id);
   };
 
-  const filteredInquiries = inquiries.filter(
-    (inq) => filterReadStatus === "All" || inq.status === filterReadStatus
-  );
-
   return (
     <div className="space-y-10 font-body">
       {/* Workspace Header */}
@@ -93,7 +106,7 @@ export default function InquiriesClient({ initialInquiries }: InquiriesClientPro
           <p className="text-xs text-white/45 py-12 text-center">No inquiry logs match this status.</p>
         ) : (
           <div className="divide-y divide-white/10">
-            {filteredInquiries.map((inq) => {
+            {paginatedInquiries.map((inq) => {
               const isExpanded = expandedId === inq._id;
               const isUnread = inq.status === "Unread";
 
@@ -210,6 +223,12 @@ export default function InquiriesClient({ initialInquiries }: InquiriesClientPro
             })}
           </div>
         )}
+
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
       </div>
     </div>
   );

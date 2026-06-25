@@ -5,17 +5,26 @@ import { adminSaveProduct, adminDeleteProduct } from "@/app/actions";
 import { Plus, Trash2, Edit2, Check, X, Image as ImageIcon, Sparkles, Upload } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import Pagination from "@/components/Pagination";
 
 interface ProductsClientProps {
   initialProducts: any[];
   categories: any[];
 }
 
+const PAGE_SIZE = 10;
+
 export default function ProductsClient({ initialProducts, categories }: ProductsClientProps) {
   const router = useRouter();
   const [products, setProducts] = useState(initialProducts);
   const [isEditing, setIsEditing] = useState(false);
   const [activeProduct, setActiveProduct] = useState<any | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = Math.ceil(products.length / PAGE_SIZE);
+  const paginatedProducts = products.slice(
+    (currentPage - 1) * PAGE_SIZE,
+    currentPage * PAGE_SIZE
+  );
   
   // File upload states
   const [uploading, setUploading] = useState(false);
@@ -494,7 +503,7 @@ export default function ProductsClient({ initialProducts, categories }: Products
             </div>
           ) : (
             <div className="divide-y divide-white/5">
-              {products.map((product) => {
+              {paginatedProducts.map((product) => {
                 const totalStock = product.sizes.reduce((sum: number, s: any) => sum + s.stock, 0);
                 const hasNoStock = totalStock === 0;
 
@@ -561,6 +570,12 @@ export default function ProductsClient({ initialProducts, categories }: Products
               })}
             </div>
           )}
+
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
         </div>
       )}
     </div>

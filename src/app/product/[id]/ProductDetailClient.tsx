@@ -29,6 +29,7 @@ export default function ProductDetailClient({
 
   const [activeImageIdx, setActiveImageIdx] = useState(0);
   const [selectedSize, setSelectedSize] = useState<"S" | "M" | "L" | "XL" | "XXL" | "">("");
+  const [selectedFabric, setSelectedFabric] = useState<number>(180);
   const [quantity, setQuantity] = useState(1);
   
   // Accordion toggle states
@@ -74,9 +75,27 @@ export default function ProductDetailClient({
   const images = product.images?.length > 0 ? product.images : [""];
   const activeImage = images[activeImageIdx];
 
+  const fabricOptions = [
+    { gsm: 180, extra: 0 },
+    { gsm: 200, extra: 100 },
+    { gsm: 220, extra: 200 },
+    { gsm: 240, extra: 300 },
+  ];
+
+  const sizeExtra: Record<string, number> = {
+    S: 0,
+    M: 0,
+    L: 0,
+    XL: 50,
+    XXL: 100,
+  };
+
   // Find stock for selected size
   const selectedSizeInfo = product.sizes.find((s) => s.size === selectedSize);
   const maxStock = selectedSizeInfo ? selectedSizeInfo.stock : 0;
+  const sizeCost = selectedSize ? sizeExtra[selectedSize] || 0 : 0;
+  const fabricCost = fabricOptions.find((f) => f.gsm === selectedFabric)?.extra || 0;
+  const displayPrice = product.sellingPrice + sizeCost + fabricCost;
 
   const handleAddToCart = () => {
     if (!selectedSize) return;
@@ -85,8 +104,9 @@ export default function ProductDetailClient({
       {
         _id: product._id,
         title: product.title,
-        price: product.sellingPrice,
+        price: displayPrice,
         size: selectedSize,
+        fabric: selectedFabric,
         image: images[0] || "",
         maxStock: maxStock,
       },
@@ -101,7 +121,7 @@ export default function ProductDetailClient({
     if (!selectedSize) return;
     const phone = adminPhone.replace(/[^0-9+]/g, ""); // clean non-digit chars
     const text = encodeURIComponent(
-      `I wish to purchase ${product.title} - Size: ${selectedSize} - Qty: ${quantity}`
+      `I wish to purchase ${product.title} - Size: ${selectedSize} - Fabric: ${selectedFabric}GSM - Qty: ${quantity}`
     );
     window.open(`https://wa.me/${phone}?text=${text}`, "_blank");
   };
@@ -164,9 +184,10 @@ export default function ProductDetailClient({
                 ₹{product.originalPrice.toFixed(2)}
               </span>
               <span className="font-body text-xl font-black text-white">
-                ₹{product.sellingPrice.toFixed(2)}
+                ₹{displayPrice.toFixed(2)}
               </span>
             </div>
+
           </div>
 
           {/* Description */}
@@ -208,6 +229,32 @@ export default function ProductDetailClient({
                     }`}
                   >
                     {s.size}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Fabric GSM Selector */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between text-xs font-display tracking-widest">
+              <span className="text-white">SELECT FABRIC GSM</span>
+              <span className="text-white/45">{selectedFabric}GSM</span>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              {fabricOptions.map((f) => {
+                const isSelected = selectedFabric === f.gsm;
+                return (
+                  <button
+                    key={f.gsm}
+                    onClick={() => setSelectedFabric(f.gsm)}
+                    className={`h-12 px-4 text-xs font-display flex items-center justify-center border transition-all ${
+                      isSelected
+                        ? "border-white bg-white text-black font-black"
+                        : "border-white/10 text-white hover:border-white/30"
+                    }`}
+                  >
+                    {f.gsm}GSM
                   </button>
                 );
               })}

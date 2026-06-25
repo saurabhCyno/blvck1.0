@@ -6,16 +6,25 @@ import { useRouter } from "next/navigation";
 import { Plus, X, Pencil, Trash2, ExternalLink } from "lucide-react";
 import ImageUpload from "@/components/ImageUpload";
 import MarkdownEditor from "@/components/MarkdownEditor";
+import Pagination from "@/components/Pagination";
 
 interface BlogsClientProps {
   initialBlogs: any[];
 }
+
+const PAGE_SIZE = 10;
 
 export default function BlogsClient({ initialBlogs }: BlogsClientProps) {
   const router = useRouter();
   const [blogs, setBlogs] = useState(initialBlogs);
   const [showModal, setShowModal] = useState(false);
   const [editingBlog, setEditingBlog] = useState<any>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = Math.ceil(blogs.length / PAGE_SIZE);
+  const paginatedBlogs = blogs.slice(
+    (currentPage - 1) * PAGE_SIZE,
+    currentPage * PAGE_SIZE
+  );
   const [form, setForm] = useState<{
     title: string;
     slug: string;
@@ -127,7 +136,7 @@ export default function BlogsClient({ initialBlogs }: BlogsClientProps) {
         <p className="text-xs text-white/45 py-12 text-center">No editorials published yet.</p>
       ) : (
         <div className="bg-black border border-white/10 divide-y divide-white/10">
-          {blogs.map((blog: any) => (
+          {paginatedBlogs.map((blog: any) => (
             <div key={blog._id} className="flex items-center justify-between p-4 gap-4">
               <div className="flex-1 min-w-0">
                 <div className="flex items-center space-x-3">
@@ -162,6 +171,12 @@ export default function BlogsClient({ initialBlogs }: BlogsClientProps) {
               </div>
             </div>
           ))}
+
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
         </div>
       )}
 

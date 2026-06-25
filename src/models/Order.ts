@@ -11,6 +11,7 @@ export interface IOrder {
   items: {
     productId: mongoose.Types.ObjectId | string | any;
     size: string;
+    fabric: number;
     quantity: number;
     priceAtPurchase: number;
   }[];
@@ -30,6 +31,7 @@ const OrderSchema = new mongoose.Schema<IOrder>({
   items: [{
     productId: { type: mongoose.Schema.Types.ObjectId, ref: "Product", required: true },
     size: { type: String, required: true },
+    fabric: { type: Number, required: true },
     quantity: { type: Number, required: true },
     priceAtPurchase: { type: Number, required: true }
   }],
@@ -39,4 +41,9 @@ const OrderSchema = new mongoose.Schema<IOrder>({
   createdAt: { type: Date, default: Date.now }
 });
 
-export const Order = mongoose.models.Order || mongoose.model("Order", OrderSchema);
+if (process.env.NODE_ENV === "development" && mongoose.models.Order) {
+  delete mongoose.models.Order;
+}
+
+const Order = mongoose.models.Order || mongoose.model("Order", OrderSchema);
+export { Order };

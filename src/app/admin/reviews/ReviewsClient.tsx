@@ -1,19 +1,36 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { adminUpdateReviewStatus, adminDeleteReview } from "@/app/actions";
 import { ChevronDown, ChevronUp, Trash2, Check, X, Calendar } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Pagination from "@/components/Pagination";
 
 interface ReviewsClientProps {
   initialReviews: any[];
 }
+
+const PAGE_SIZE = 10;
 
 export default function ReviewsClient({ initialReviews }: ReviewsClientProps) {
   const router = useRouter();
   const [reviews, setReviews] = useState(initialReviews);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [filterStatus, setFilterStatus] = useState<string>("All");
+  const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filterStatus]);
+
+  const filteredReviews = reviews.filter(
+    (r) => filterStatus === "All" || r.status === filterStatus
+  );
+  const totalPages = Math.ceil(filteredReviews.length / PAGE_SIZE);
+  const paginatedReviews = filteredReviews.slice(
+    (currentPage - 1) * PAGE_SIZE,
+    currentPage * PAGE_SIZE
+  );
 
   const handleDelete = async (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -51,10 +68,6 @@ export default function ReviewsClient({ initialReviews }: ReviewsClientProps) {
   const toggleExpand = (id: string) => {
     setExpandedId(expandedId === id ? null : id);
   };
-
-  const filteredReviews = reviews.filter(
-    (r) => filterStatus === "All" || r.status === filterStatus
-  );
 
   const getStatusStyle = (status: string) => {
     switch (status) {
@@ -102,7 +115,7 @@ export default function ReviewsClient({ initialReviews }: ReviewsClientProps) {
           <p className="text-xs text-white/45 py-12 text-center">No reviews match this filter.</p>
         ) : (
           <div className="divide-y divide-white/10">
-            {filteredReviews.map((review) => {
+            {paginatedReviews.map((review) => {
               const isExpanded = expandedId === review._id;
 
               return (
@@ -280,6 +293,12 @@ export default function ReviewsClient({ initialReviews }: ReviewsClientProps) {
             })}
           </div>
         )}
+
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
       </div>
     </div>
   );

@@ -4,10 +4,13 @@ import { useState } from "react";
 import { adminSaveCategory, adminDeleteCategory } from "@/app/actions";
 import { Plus, Trash2, Tag, AlertTriangle } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Pagination from "@/components/Pagination";
 
 interface CategoryClientProps {
   initialCategories: any[];
 }
+
+const PAGE_SIZE = 10;
 
 export default function CategoryClient({ initialCategories }: CategoryClientProps) {
   const router = useRouter();
@@ -16,6 +19,12 @@ export default function CategoryClient({ initialCategories }: CategoryClientProp
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = Math.ceil(categories.length / PAGE_SIZE);
+  const paginatedCategories = categories.slice(
+    (currentPage - 1) * PAGE_SIZE,
+    currentPage * PAGE_SIZE
+  );
 
   const handleAddCategory = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -125,7 +134,7 @@ export default function CategoryClient({ initialCategories }: CategoryClientProp
             <p className="text-xs text-white/45 py-4">No categories configured in MongoDB.</p>
           ) : (
             <div className="divide-y divide-white/5">
-              {categories.map((cat) => (
+              {paginatedCategories.map((cat) => (
                 <div key={cat._id} className="flex justify-between items-center py-3.5 first:pt-0 last:pb-0">
                   <div className="flex items-center space-x-3">
                     <Tag className="h-4 w-4 text-white/30" />
@@ -144,6 +153,12 @@ export default function CategoryClient({ initialCategories }: CategoryClientProp
               ))}
             </div>
           )}
+
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
         </div>
       </div>
     </div>

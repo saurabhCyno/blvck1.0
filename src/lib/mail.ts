@@ -36,7 +36,7 @@ export async function sendEmail({
 }
 
 function orderItemsTable(
-  items: { title: string; size: string; quantity: number; price: number }[]
+  items: { title: string; size: string; fabric: number; quantity: number; price: number }[]
 ): string {
   const rows = items
     .map(
@@ -44,6 +44,7 @@ function orderItemsTable(
     <tr>
       <td style="padding:8px 12px;border-bottom:1px solid #222;color:#ccc;font-size:13px">${item.title}</td>
       <td style="padding:8px 12px;border-bottom:1px solid #222;color:#ccc;font-size:13px">${item.size}</td>
+      <td style="padding:8px 12px;border-bottom:1px solid #222;color:#ccc;font-size:13px">${item.fabric ? item.fabric + "GSM" : "—"}</td>
       <td style="padding:8px 12px;border-bottom:1px solid #222;color:#ccc;font-size:13px;text-align:center">${item.quantity}</td>
       <td style="padding:8px 12px;border-bottom:1px solid #222;color:#fff;font-size:13px;text-align:right">₹${item.price.toFixed(2)}</td>
       <td style="padding:8px 12px;border-bottom:1px solid #222;color:#fff;font-size:13px;text-align:right">₹${(item.price * item.quantity).toFixed(2)}</td>
@@ -57,6 +58,7 @@ function orderItemsTable(
         <tr style="background:#111">
           <th style="padding:10px 12px;text-align:left;color:#888;font-size:11px;text-transform:uppercase;letter-spacing:1px">Item</th>
           <th style="padding:10px 12px;text-align:left;color:#888;font-size:11px;text-transform:uppercase;letter-spacing:1px">Size</th>
+          <th style="padding:10px 12px;text-align:left;color:#888;font-size:11px;text-transform:uppercase;letter-spacing:1px">Fabric</th>
           <th style="padding:10px 12px;text-align:center;color:#888;font-size:11px;text-transform:uppercase;letter-spacing:1px">Qty</th>
           <th style="padding:10px 12px;text-align:right;color:#888;font-size:11px;text-transform:uppercase;letter-spacing:1px">Price</th>
           <th style="padding:10px 12px;text-align:right;color:#888;font-size:11px;text-transform:uppercase;letter-spacing:1px">Total</th>
@@ -85,7 +87,7 @@ function baseTemplate(title: string, body: string): string {
 export function buildOrderConfirmationHtml(
   orderId: string,
   customerInfo: { name: string; address: string },
-  items: { title: string; size: string; quantity: number; price: number }[],
+  items: { title: string; size: string; fabric: number; quantity: number; price: number }[],
   totalAmount: number
 ): string {
   return baseTemplate(
@@ -114,7 +116,7 @@ export function buildOrderConfirmationHtml(
 export function buildAdminNotificationHtml(
   orderId: string,
   customerInfo: { name: string; email: string; phone: string; address: string },
-  items: { title: string; size: string; quantity: number; price: number }[],
+  items: { title: string; size: string; fabric: number; quantity: number; price: number }[],
   totalAmount: number
 ): string {
   return baseTemplate(

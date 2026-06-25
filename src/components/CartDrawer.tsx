@@ -120,7 +120,7 @@ export default function CartDrawer() {
                           </span>
                         </div>
                         <p className="font-body text-xs text-white/40 tracking-widest uppercase">
-                          SIZE: {item.size}
+                          SIZE: {item.size}{item.fabric ? <> &bull; FABRIC: {item.fabric}GSM</> : ""}
                         </p>
                       </div>
 

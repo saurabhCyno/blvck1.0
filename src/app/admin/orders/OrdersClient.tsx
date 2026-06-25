@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { adminUpdateOrderStatus, adminCreateOrder, adminGetOrders } from "@/app/actions";
 import { Calendar, User, Phone, MapPin, ChevronDown, ChevronUp, Plus, X, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Pagination from "@/components/Pagination";
 
 interface OrdersClientProps {
   initialOrders: any[];
@@ -14,6 +15,7 @@ interface OrdersClientProps {
 interface FormItem {
   productId: string;
   size: string;
+  fabric: number;
   quantity: number;
   priceAtPurchase: number;
   title: string;
@@ -26,11 +28,27 @@ const emptyForm = {
   address: "",
 };
 
+const PAGE_SIZE = 10;
+
 export default function OrdersClient({ initialOrders, products, categories }: OrdersClientProps) {
   const router = useRouter();
   const [orders, setOrders] = useState(initialOrders);
   const [expandedOrderId, setExpandedOrderId] = useState<string | null>(null);
   const [filterStatus, setFilterStatus] = useState<string>("All");
+  const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filterStatus]);
+
+  const filteredOrders = orders.filter(
+    (o) => filterStatus === "All" || o.orderStatus === filterStatus
+  );
+  const totalPages = Math.ceil(filteredOrders.length / PAGE_SIZE);
+  const paginatedOrders = filteredOrders.slice(
+    (currentPage - 1) * PAGE_SIZE,
+    currentPage * PAGE_SIZE
+  );
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [customer, setCustomer] = useState(emptyForm);
   const [formItems, setFormItems] = useState<FormItem[]>([]);
@@ -60,6 +78,7 @@ export default function OrdersClient({ initialOrders, products, categories }: Or
       {
         productId: selectedProductId,
         size: selectedSize,
+        fabric: 180,
         quantity: selectedQty,
         priceAtPurchase: selectedProduct.sellingPrice,
         title: selectedProduct.title,
@@ -92,9 +111,10 @@ export default function OrdersClient({ initialOrders, products, categories }: Or
           phone: customer.phone,
           address: customer.address,
         },
-        items: formItems.map(({ productId, size, quantity, priceAtPurchase }) => ({
+        items: formItems.map(({ productId, size, fabric, quantity, priceAtPurchase }) => ({
           productId,
           size,
+          fabric,
           quantity,
           priceAtPurchase,
         })),
@@ -135,10 +155,6 @@ export default function OrdersClient({ initialOrders, products, categories }: Or
   const toggleExpandOrder = (id: string) => {
     setExpandedOrderId(expandedOrderId === id ? null : id);
   };
-
-  const filteredOrders = orders.filter(
-    (o) => filterStatus === "All" || o.orderStatus === filterStatus
-  );
 
   const statuses = ["Pending", "In Progress", "Completed", "Delivered", "Cancelled"];
 
@@ -206,7 +222,7 @@ export default function OrdersClient({ initialOrders, products, categories }: Or
           <p className="text-xs text-white/45 py-12 text-center">No client orders match this state.</p>
         ) : (
           <div className="divide-y divide-white/10">
-            {filteredOrders.map((order) => {
+            {paginatedOrders.map((order) => {
               const isExpanded = expandedOrderId === order._id;
               
               return (
@@ -290,7 +306,7 @@ export default function OrdersClient({ initialOrders, products, categories }: Or
                                   {item.productId?.title || "DELETED PRODUCT"}
                                 </h5>
                                 <p className="text-xs text-white/40 uppercase">
-                                  SIZE: {item.size} &bull; QTY: {item.quantity}
+                                  SIZE: {item.size}{item.fabric ? <> &bull; FABRIC: {item.fabric}GSM</> : ""} &bull; QTY: {item.quantity}
                                 </p>
                               </div>
                               <span className="font-mono text-white/60">
@@ -335,6 +351,12 @@ export default function OrdersClient({ initialOrders, products, categories }: Or
             })}
           </div>
         )}
+
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
       </div>
 
       {/* Create WhatsApp Order Modal */}

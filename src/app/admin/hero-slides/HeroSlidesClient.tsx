@@ -5,16 +5,25 @@ import { adminCreateHeroSlide, adminUpdateHeroSlide, adminDeleteHeroSlide } from
 import { useRouter } from "next/navigation";
 import { Plus, X, Pencil, Trash2, GripVertical } from "lucide-react";
 import ImageUpload from "@/components/ImageUpload";
+import Pagination from "@/components/Pagination";
 
 interface HeroSlidesClientProps {
   initialSlides: any[];
 }
+
+const PAGE_SIZE = 10;
 
 export default function HeroSlidesClient({ initialSlides }: HeroSlidesClientProps) {
   const router = useRouter();
   const [slides, setSlides] = useState(initialSlides);
   const [showModal, setShowModal] = useState(false);
   const [editingSlide, setEditingSlide] = useState<any>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = Math.ceil(slides.length / PAGE_SIZE);
+  const paginatedSlides = slides.slice(
+    (currentPage - 1) * PAGE_SIZE,
+    currentPage * PAGE_SIZE
+  );
   const [form, setForm] = useState<{
     title: string;
     subtitle: string;
@@ -135,7 +144,7 @@ export default function HeroSlidesClient({ initialSlides }: HeroSlidesClientProp
         </p>
       ) : (
         <div className="bg-black border border-white/10 divide-y divide-white/10">
-          {slides.map((slide: any) => (
+          {paginatedSlides.map((slide: any) => (
             <div key={slide._id} className="flex items-center justify-between p-4 gap-4">
               <div className="flex items-center space-x-4 flex-1 min-w-0">
                 <GripVertical className="h-4 w-4 text-white/20 flex-shrink-0" />
@@ -171,6 +180,12 @@ export default function HeroSlidesClient({ initialSlides }: HeroSlidesClientProp
               </div>
             </div>
           ))}
+
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
         </div>
       )}
 
