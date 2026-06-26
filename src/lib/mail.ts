@@ -1,17 +1,17 @@
 import nodemailer from "nodemailer";
 
 const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST || "smtp.gmail.com",
-  port: parseInt(process.env.SMTP_PORT || "587"),
-  secure: process.env.SMTP_SECURE === "true",
+  service: "gmail",
   auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
+    type: "OAuth2",
+    user: process.env.GMAIL_USER,
+    clientId: process.env.GMAIL_CLIENT_ID,
+    clientSecret: process.env.GMAIL_CLIENT_SECRET,
+    refreshToken: process.env.GMAIL_REFRESH_TOKEN,
   },
 });
 
-const FROM_EMAIL = process.env.SMTP_FROM || process.env.SMTP_USER || "blvck6196@gmail.com";
-export const ADMIN_EMAIL = process.env.ADMIN_EMAIL || process.env.SMTP_USER || "blvck6196@gmail.com";
+export const ADMIN_EMAIL = process.env.ADMIN_EMAIL || process.env.GMAIL_USER || "blvck6196@gmail.com";
 
 export async function sendEmail({
   to,
@@ -22,13 +22,13 @@ export async function sendEmail({
   subject: string;
   html: string;
 }) {
-  if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
-    console.warn("SMTP not configured. Email not sent to", to);
+  if (!process.env.GMAIL_USER || !process.env.GMAIL_REFRESH_TOKEN) {
+    console.warn("Gmail API not configured. Email not sent to", to);
     return;
   }
 
   await transporter.sendMail({
-    from: `"BLVCK CORE" <${FROM_EMAIL}>`,
+    from: `"BLVCK CORE" <${process.env.GMAIL_USER}>`,
     to,
     subject,
     html,
